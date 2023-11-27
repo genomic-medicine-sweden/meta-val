@@ -1,4 +1,4 @@
-# ![nf-core/metaval](docs/images/nf-core-metaval_logo_light.png#gh-light-mode-only) ![nf-core/metaval](docs/images/nf-core-metaval_logo_dark.png#gh-dark-mode-only)
+# metaval
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
@@ -9,15 +9,15 @@
 
 ## Introduction
 
-**nf-core/metaval** is a bioinformatics pipeline that verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, including both Illumina short-gun sequencing and Nanopore sequencing data.
+**metaval** is a bioinformatics pipeline that verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, including both Illumina short-gun sequencing and Nanopore sequencing data.
 
-At moment, meta-val only checks the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`
+At moment, metaval only checks the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`
 
 ## Pipeline summary
 
 1. Extract classified reads for organisms of interest, such as all identified viruses or a predefined list of organisms.
 
-2. Use `BLAST` to identify the closet reference genome for the extracted reads.
+2. Use `BLAST` to identify the closet reference genome for the extracted reads (Downsample if there are more than 200 reads)
 
 3. Map the extracted reads to reference genomes using `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
 
