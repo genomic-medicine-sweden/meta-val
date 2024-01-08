@@ -51,7 +51,7 @@
                 "exists": true,
                 "format": "file-path",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for short reads 1 must be provided from bowtie2 unmapped read 1 against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
+                "errorMessage": "FastQ file for short reads 1 or long reads must be provided from bowtie2 or minimap2 unmapped read against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
             },
             "fastq_2": {
                 "type": "string",
@@ -97,17 +97,6 @@
                 "pattern": "^\\S+\\.tsv$",
                 "errorMessage": "Diamond classification result should be provided."
             }
-        },
-        "required": [
-            "sample",
-            "run_accession",
-            "instrument_platform",
-            "reads_type",
-            "fastq_1",
-            "kraken2_report",
-            "kraken2_classifiedout",
-            "centrifuge_out",
-            "centrifuge_result"
-        ]
+        }
     }
 }
