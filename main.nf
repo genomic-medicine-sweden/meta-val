@@ -30,7 +30,7 @@ params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
 
 include { validateParameters; paramsHelp } from 'plugin/nf-validation'
 
-// Print help message if needed
+// Print help message, supply typical command line usage for the pipeline
 if (params.help) {
     def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
     def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
