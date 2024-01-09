@@ -52,8 +52,6 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 workflow METAVAL {
 
     ch_versions = Channel.empty()
-
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
     
     ch_input = Channel.fromSamplesheet("input")
 
