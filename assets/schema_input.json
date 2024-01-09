@@ -39,13 +39,6 @@
                 ],
                 "errorMessage": "Suquencing platform must be provided."
             },
-            "reads_type": {
-                "type": "string",
-                "exists": true,
-                "enum": ["short", "long"],
-                "errorMessage": "Reads type must be provided",
-                "meta": ["reads_type"]
-            },
             "fastq_1": {
                 "type": "string",
                 "exists": true,
