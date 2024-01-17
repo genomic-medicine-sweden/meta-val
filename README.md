@@ -1,38 +1,37 @@
 # ![nf-core/metaval](docs/images/nf-core-metaval_logo_light.png#gh-light-mode-only) ![nf-core/metaval](docs/images/nf-core-metaval_logo_dark.png#gh-dark-mode-only)
 
+[![GitHub Actions CI Status](https://github.com/nf-core/metaval/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/metaval/actions?query=workflow%3A%22nf-core+CI%22)
+[![GitHub Actions Linting Status](https://github.com/nf-core/metaval/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/metaval/actions?query=workflow%3A%22nf-core+linting%22)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/metaval/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/metaval)
 
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23metaval-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/metaval)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
 ## Introduction
 
-**nf-core/metaval** is a bioinformatics pipeline that verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, including both Illumina short-gun sequencing and Nanopore sequencing data.
+**nf-core/metaval** is a bioinformatics pipeline that ...
 
-At moment, meta-val only checks the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`
+<!-- TODO nf-core:
+   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
+   major pipeline sections and the types of output it produces. You're giving an overview to someone new
+   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
+-->
 
-## Pipeline summary
+<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
+     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
+<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
-1. Extract classified reads for organisms of interest, such as all identified viruses or a predefined list of organisms.
-
-2. Use `BLAST` to identify the closet reference genome for the extracted reads.
-
-3. Map the extracted reads to reference genomes using `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
-
-4. Construct consensus maps for the mapped reads.
-
-5. Generat Coverage plots
-
+1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
-:::note
-If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
-to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
-with `-profile test` before running the workflow on actual data.
-:::
+> [!NOTE]
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
 <!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
      Explain what rows and columns represent. For instance (please edit as appropriate):
@@ -61,11 +60,9 @@ nextflow run nf-core/metaval \
    --outdir <OUTDIR>
 ```
 
-:::warning
-Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
-provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
-see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
-:::
+> [!WARNING]
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
+> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/metaval/usage) and the [parameter documentation](https://nf-co.re/metaval/parameters).
 
@@ -77,7 +74,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/metaval was originally written by @LilyAnderssonLee.
+nf-core/metaval was originally written by LilyAnderssonLee.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -87,11 +84,12 @@ We thank the following people for their extensive assistance in the development 
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
+For further information or help, don't hesitate to get in touch on the [Slack `#metaval` channel](https://nfcore.slack.com/channels/metaval) (you can join with [this invite](https://nf-co.re/join/slack)).
 
 ## Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use  nf-core/metaval for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use nf-core/metaval for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 <!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
