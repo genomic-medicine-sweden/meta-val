@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-
 """Provide a command line tool to validate and transform tabular samplesheets."""
-
 
 import argparse
 import csv
@@ -24,10 +22,7 @@ class RowChecker:
 
     """
 
-    VALID_FORMATS = (
-        ".fq.gz",
-        ".fastq.gz",
-    )
+    VALID_FORMATS = (".fq.gz", ".fastq.gz")
 
     def __init__(
         self,
