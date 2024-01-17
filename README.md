@@ -6,7 +6,6 @@
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/metaval)
 
-
 ## Introduction
 
 **metaval** is a bioinformatics pipeline that verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, including both Illumina short-gun sequencing and Nanopore sequencing data.
@@ -24,7 +23,6 @@ At moment, metaval only checks the classification results from three classifiers
 4. Construct consensus maps for the mapped reads.
 
 5. Generat Coverage plots
-
 
 ## Usage
 
@@ -81,7 +79,6 @@ We thank the following people for their extensive assistance in the development 
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
-
 
 ## Citations
 
