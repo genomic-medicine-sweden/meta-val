@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-"""Provide a command line tool to validate and transform tabular samplesheets."""
-
 import argparse
 import csv
 import logging
@@ -28,10 +26,8 @@ class RowChecker:
         sample_col="sample",
         run_accession_col="run_accession",
         instrument_platform_col="instrument_platform",
-        reads_type_col="reads_type",
         fastq_1_col="fastq_1",
         fastq_2_col="fastq_2",
-        fasta_col="fasta",
         kraken2_report_col="kraken2_report",
         kraken2_classifiedout_col="kraken2_classifiedout",
         centrifuge_out_col="centrifuge_out",
@@ -49,14 +45,10 @@ class RowChecker:
                 (default "run_accession").
             instrument_platform_col (str): The name of the column that contains the instrument platform
                 (default "instrument_platform").
-            reads_type_col (str): The name of the column that contains the reads type, shortread or longread
-                (default "reads_type").
             fastq_1_col (str): The name of the column that contains the first (or only)
                 FASTQ file path (default "fastq_1") from bowtie2 unmapped read 1 against the human genome.
             fastq_2_col (str): The name of the column that contains the second (if any)
                 FASTQ file path (default "fastq_2") from bowtie2 unmapped read 2 against the human genome.
-            fasta_col (str): The name of the column that contains the FASTA information
-                (default "fasta") from minimap2 unmapped read against the human genome.
             kraken2_report_col (str): The name of the column that contains the kraken2 report
                 (default "kraken2_report").
             kraken2_classifiedout_col (str): The name of the column that contains the kraken2 classifiedout
@@ -73,10 +65,8 @@ class RowChecker:
         self._sample_col = sample_col
         self._run_accession_col = run_accession_col
         self._instrument_platform_col = instrument_platform_col
-        self._reads_type_col = reads_type_col
         self._fastq_1_col = fastq_1_col
         self._fastq_2_col = fastq_2_col
-        self._fasta_col = fasta_col
         self._kraken2_report_col = kraken2_report_col
         self._kraken2_classifiedout_col = kraken2_classifiedout_col
         self._centrifuge_out_col = centrifuge_out_col
@@ -201,10 +191,8 @@ def check_samplesheet(file_in, file_out):
         "sample",
         "run_accession",
         "instrument_platform",
-        "reads_type",
         "fastq_1",
         "fastq_2",
-        "fasta",
         "kraken2_report",
         "kraken2_classifiedout",
         "centrifuge_out",
