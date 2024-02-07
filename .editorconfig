@@ -30,3 +30,8 @@ indent_style = unset
 # ignore python
 [*.{py}]
 indent_style = unset
+
+# ignore download_pipeline.yml
+[.github/workflows/download_pipeline.yml]
+ident_style = unset
+
