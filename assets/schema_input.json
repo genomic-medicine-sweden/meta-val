@@ -88,7 +88,7 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.tsv$",
-                "errorMessage": "Diamond classification result should be provided."
+                "errorMessage": "Diamond classification results should be provided."
             }
         }
     }
