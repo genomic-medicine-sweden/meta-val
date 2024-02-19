@@ -82,7 +82,7 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.centrifuge.results.txt$",
-                "errorMessage": "Centrifuge result file must be provided, and it should contains eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches."
+                "errorMessage": "Centrifuge result file must be provided and it should contain eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches."
             },
             "diamond": {
                 "type": "string",
