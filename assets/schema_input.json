@@ -44,7 +44,7 @@
                 "exists": true,
                 "format": "file-path",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for short reads 1, long reads or merged pair-end reads must be provided from bowtie2 or minimap2 unmapped read against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
+                "errorMessage": "FastQ file for short reads 1, long reads or merged pair-end reads must be provided from bowtie2 or minimap2 unmapped reads against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
             },
             "fastq_2": {
                 "type": "string",
@@ -66,13 +66,13 @@
                 "pattern": "^\\S+\\.kraken2\\.kraken2\\.report\\.txt$",
                 "errorMessage": "Kraken2 classification report must be provided."
             },
-            "kraken2_classifiedout": {
+            "kraken2_result": {
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.kraken2\\.kraken2\\.classifiedreads\\.txt$",
                 "errorMessage": "The file contains the taxid and sequences ID."
             },
-            "centrifuge_out": {
+            "centrifuge_report": {
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.centrifuge.txt$",

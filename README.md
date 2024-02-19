@@ -39,7 +39,7 @@ First, prepare a samplesheet with your input data that looks as follows:
 `samplesheet.csv`:
 
 ```csv
-sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_classifiedout,centrifuge_out,centrifuge_result,diamond
+sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_result,centrifuge_report,centrifuge_result,diamond
 sample1,run1,ILLUMINA,sample1.unmapped_1.fastq.gz,sample1.unmapped_2.fastq.gz,sample1.kraken2.kraken2.report.txt,sample1.kraken2.kraken2.classifiedreads.txt,sample1.centrifuge.txt,sample1.centrifuge.results.txt,sample1.diamond.tsv
 sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sample2.kraken2.kraken2.report.txt,sample2.kraken2.kraken2.classifiedreads.txt,sample2.centrifuge.txt,sample2.centrifuge.results.txt,sample2.diamond.tsv
 ```
@@ -66,15 +66,52 @@ For more details and further functionality, please refer to the [usage documenta
 
 There are three test datasets within `assets/data/`, produced by the `nf-core/taxprofiler` pipeline
 
-- `taxprofiler_test_data`: produced by running the `test.config`
-- `taxprofiler_test_full_data`: produced by running the `test_full.config`
+- `taxprofiler_test_data`: produced by executing the `test.config` file within the pipeline `nf-core/taxprofiler`.
+- `taxprofiler_test_full_data`: produced by executing the `test_full.config` file within the pipeline `nf-core/taxprofiler`.
 - `test_data_version2_subset`: produced by running the data downloaded from https://www.nature.com/articles/s41598-021-83812-x
 
 The corresponding input samplesheets are stored in `assets/`
 
-- `samplesheet_v1.csv`:results of taxprofiler test data; no viruses; single-end (`perform_runmerging`).
+- `samplesheet_v1.csv`:results of taxprofiler test data; limited classification results; no viruses; single-end (`perform_runmerging`).
 - `samplesheet_v2.csv`:results of taxprofiler full test data; no viruses; single-end (`perform_runmerging`).
 - `samplesheet_v3.csv`: with viruses; subset data from `test_data_version2_subset` (sample 20% of pair-end reads).
+
+## Headlines of input files
+`kraken2_report` & `centrifuge_report`
+```csv
+ 4.62	167021	167021	U	0	unclassified
+ 95.38	3445908	335	R	1	root
+ 95.36	3445179	323	R1	131567	  cellular organisms
+ 93.28	3369988	622	D	2759	    Eukaryota
+ 93.26	3369247	30	D1	33154	      Opisthokonta
+```
+`kraken2_result`
+
+```csv
+C	SRR13439790.3	9606	150|150	9606:4 0:18 9606:7 0:5 9606:15 0:19 9606:9 0:2 9606:13 33154:1 9606:9 0:9 9606:5 |:| 9606:26 0:1 9606:3 0:32 9606:2 0:10 9606:3 0:21 9606:17 0:1
+C	SRR13439790.5	9606	103|103	9606:5 0:38 9606:5 0:3 9606:8 0:2 9606:8 |:| 9606:13 0:56
+C	SRR13439790.7	9606	150|150	9606:60 0:4 9606:1 0:1 9606:6 0:26 9606:2 0:7 9606:9 |:| 0:5 9606:1 0:44 9606:4 0:7 9606:1 0:21 9606:20 2759:4 9606:9
+C	SRR13439790.8	9606	107|107	0:3 9606:23 0:3 9606:14 0:16 9606:14 |:| 9606:3 0:51 9606:11 0:8
+C	SRR13439790.9	9606	101|150	0:48 9606:1 0:18 |:| 0:8 9606:5 0:103
+```
+`centrifuge_result`
+
+```csv
+readID	seqID	taxID	score	2ndBestScore	hitLength	queryLength	numMatches
+SRR13439790.3	NT_187391.1	9606	1624	557	109	300	1
+SRR13439790.5	NC_000022.11	9606	905	169	96	206	1
+SRR13439790.7	NC_000007.14	9606	6025	961	125	300	1
+SRR13439790.9	unclassified	0	0	0	0	251	1
+```
+`diamond`
+
+```csv
+SRR13439790.3	0	0
+SRR13439790.3	0	0
+SRR13439790.5	0	0
+SRR13439790.5	0	0
+SRR13439790.7	0	0
+```
 
 ## Pipeline output
 
