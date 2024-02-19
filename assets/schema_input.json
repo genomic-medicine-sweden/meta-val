@@ -70,7 +70,7 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.kraken2\\.kraken2\\.classifiedreads\\.txt$",
-                "errorMessage": "The file contains the taxid and sequences ID."
+                "errorMessage": "Kraken2 classification results must be provided."
             },
             "centrifuge_report": {
                 "type": "string",
