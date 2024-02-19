@@ -44,7 +44,7 @@
                 "exists": true,
                 "format": "file-path",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for short reads 1, long reads or merged pair-end reads must be provided from bowtie2 or minimap2 unmapped read against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
+                "errorMessage": "FastQ file for short reads 1, long reads or merged pair-end reads must be provided from bowtie2 or minimap2 unmapped reads against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
             },
             "fastq_2": {
                 "type": "string",
