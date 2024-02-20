@@ -25,17 +25,8 @@
                 "type": "string",
                 "exists": true,
                 "enum": [
-                    "ABI_SOLID",
-                    "BGISEQ",
-                    "CAPILLARY",
-                    "COMPLETE_GENOMICS",
-                    "DNBSEQ",
-                    "HELICOS",
                     "ILLUMINA",
-                    "ION_TORRENT",
-                    "LS454",
-                    "OXFORD_NANOPORE",
-                    "PACBIO_SMRT"
+                    "OXFORD_NANOPORE"
                 ],
                 "errorMessage": "Suquencing platform must be provided."
             },
