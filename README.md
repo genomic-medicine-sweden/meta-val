@@ -80,7 +80,9 @@ The corresponding input samplesheets are stored in `assets/`
 - `samplesheet_v3.csv`: with viruses; subset data from `test_data_version2_subset` (sample 20% of pair-end reads).
 
 ## Headlines of input files
+
 `kraken2_report` & `centrifuge_report`
+
 ```csv
  4.62	167021	167021	U	0	unclassified
  95.38	3445908	335	R	1	root
@@ -88,6 +90,7 @@ The corresponding input samplesheets are stored in `assets/`
  93.28	3369988	622	D	2759	    Eukaryota
  93.26	3369247	30	D1	33154	      Opisthokonta
 ```
+
 `kraken2_result`
 
 ```csv
@@ -97,6 +100,7 @@ C	SRR13439790.7	9606	150|150	9606:60 0:4 9606:1 0:1 9606:6 0:26 9606:2 0:7 9606:
 C	SRR13439790.8	9606	107|107	0:3 9606:23 0:3 9606:14 0:16 9606:14 |:| 9606:3 0:51 9606:11 0:8
 C	SRR13439790.9	9606	101|150	0:48 9606:1 0:18 |:| 0:8 9606:5 0:103
 ```
+
 `centrifuge_result`
 
 ```csv
@@ -106,6 +110,7 @@ SRR13439790.5	NC_000022.11	9606	905	169	96	206	1
 SRR13439790.7	NC_000007.14	9606	6025	961	125	300	1
 SRR13439790.9	unclassified	0	0	0	0	251	1
 ```
+
 `diamond`
 
 ```csv
