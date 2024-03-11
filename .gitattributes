@@ -2,3 +2,24 @@
 *.nf.test linguist-language=nextflow
 modules/nf-core/** linguist-generated
 subworkflows/nf-core/** linguist-generated
+assets/data/taxprofiler_test_data/2612_se_db2.kraken2.kraken2.classifiedreads.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_se_db3.centrifuge.results.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_ERR5766176.unmapped.fastq.gz filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_ERR5766176_B.unmapped.fastq.gz filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_ERR5766180.unmapped.fastq.gz filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_se_db1.diamond.tsv filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_se_db2.kraken2.kraken2.report.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2612_se_db3.centrifuge.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2613_ERR5766181.unmapped.fastq.gz filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2613_se_db1.diamond.tsv filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2613_se_db2.kraken2.kraken2.classifiedreads.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2613_se_db2.kraken2.kraken2.report.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2613_se_db3.centrifuge.results.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/2613_se_db3.centrifuge.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/ERR3201952_ERR3201952.unmapped_other.fastq.gz filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/ERR3201952_se_db1.diamond.tsv filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/ERR3201952_se_db2.kraken2.kraken2.classifiedreads.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/ERR3201952_se_db2.kraken2.kraken2.report.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/ERR3201952_se_db3.centrifuge.results.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/ERR3201952_se_db3.centrifuge.txt filter=lfs diff=lfs merge=lfs -text
+assets/data/taxprofiler_test_data/*.fastq.gz filter=lfs diff=lfs merge=lfs -text
