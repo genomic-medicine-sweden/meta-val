@@ -38,15 +38,8 @@
                 "type": "string",
                 "exists": true,
                 "format": "file-path",
-                "anyOf": [
-                    {
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
-                    },
-                    {
-                        "maxLength": 0
-                    }
-                ],
-                "errorMessage": "FastQ file for short reads 2 must be provided from bowtie2 unmapped read 2 against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                "errorMessage": "The FastQ file for short reads 2 resulting from Bowtie2's unmapped read 2 against the human genome, cannot contain spaces and must have the extension '.fq.gz' or '.fastq.gz'."
             },
             "kraken2_report": {
                 "type": "string",
@@ -78,6 +71,7 @@
                 "pattern": "^\\S+\\.tsv$",
                 "errorMessage": "Diamond classification results should be provided."
             }
-        }
+        },
+        "required": ["sample", "run_accession", "instrument_platform", "fastq_1"]
     }
 }
