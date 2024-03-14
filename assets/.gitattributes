@@ -1,3 +1,4 @@
 data/taxprofiler_test_data/*.txt filter=lfs diff=lfs merge=lfs -text
 data/taxprofiler_test_data/*.tsv filter=lfs diff=lfs merge=lfs -text
 data/taxprofiler_test_data/*.fastq.gz filter=lfs diff=lfs merge=lfs -text
+data/taxprofiler_test_data/* filter=lfs diff=lfs merge=lfs -text
