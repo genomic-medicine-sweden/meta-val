@@ -1,2 +1,0 @@
-data/taxprofiler_test_data/2612_se_db2.kraken2.kraken2.classifiedreads.txt filter=lfs diff=lfs merge=lfs -text
-assets/data/taxprofiler_test_data/2612_se_db3.centrifuge.results.txt filter=lfs diff=lfs merge=lfs -text
