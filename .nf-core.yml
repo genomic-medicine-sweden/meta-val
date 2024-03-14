@@ -16,8 +16,3 @@ lint:
     - docs/README.md
     - pyproject.toml
 repository_type: pipeline
-template:
-  author: LilyAnderssonLee
-  description: Taxprofiler post-processing: verification of predicted species from nf-core/taxprofiler
-  name: metaval
-  prefix: genomic-medicine-sweden
