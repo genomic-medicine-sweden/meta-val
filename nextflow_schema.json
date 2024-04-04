@@ -21,8 +21,7 @@
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/metaval/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv",
-                    "schema": "assets/schema_input.json"
+                    "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
                     "type": "string",
@@ -286,5 +285,22 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "extract_kraken2_reads": {
+            "type": "boolean",
+            "default": true,
+            "description": "Extract classified Kraken2 output by taxonomic ID."
+        },
+        "extract_centrifuge_reads": {
+            "type": "boolean",
+            "default": true,
+            "description": "Extract classified centrifuge output by taxonomic ID."
+        },
+        "extract_diamond_reads": {
+            "type": "boolean",
+            "default": true,
+            "description": "Extract classified diamond output by taxonomic ID."
+        }
+    }
 }
