@@ -25,7 +25,8 @@
                 "type": "string",
                 "exists": true,
                 "enum": ["ILLUMINA", "OXFORD_NANOPORE"],
-                "errorMessage": "Suquencing platform must be provided."
+                "errorMessage": "Suquencing platform must be provided.",
+                "meta": ["instrument_platform"]
             },
             "fastq_1": {
                 "type": "string",
@@ -70,6 +71,12 @@
                 "format": "file-path",
                 "pattern": "^\\S+\\.tsv$",
                 "errorMessage": "Diamond classification results should be provided."
+            },
+            "diamond_taxpasta": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Standardized diamond profiling with taxonomic information obtained from taxpasta."
             }
         },
         "required": ["sample", "run_accession", "instrument_platform", "fastq_1"]
