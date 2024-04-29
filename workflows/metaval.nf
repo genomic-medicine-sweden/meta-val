@@ -57,6 +57,11 @@ workflow METAVAL {
         //[new_meta, kraken2_result]
         [meta, kraken2_result]
     }
+    kraken2_report = ch_samplesheet.map { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+        //def new_meta = meta + [tool: "kraken2"]
+        //[new_meta, kraken2_result]
+        [meta, kraken2_report]
+    }
 
     // combine reads
     def reads = ch_input.fastq.mix( ch_input.nanopore )
@@ -65,15 +70,16 @@ workflow METAVAL {
     //kraken2_results.dump(tag:"results")
     // extract reads from kraken2, centrifuge and diamond
 
-    if ( params.extract_kraken2_reads ) {
-        kraken2_taxids = EXTRACT_VIRAL_TAXID(kraken2_taxpasta)
-        taxid_all = kraken2_taxids.viral_taxid.splitText()
-        taxid_all.map { taxid ->
-            KRAKENTOOLS_EXTRACTKRAKENREADS(taxid, kraken2_results, reads, [])
+    if (params.extract_kraken2_reads) {
+        if (params.taxid) {
+            KRAKENTOOLS_EXTRACTKRAKENREADS(params.taxid, kraken2_results, reads, kraken2_report)
+        } else {
+            kraken2_taxids = EXTRACT_VIRAL_TAXID(kraken2_taxpasta)
+            kraken2_taxids.viral_taxid.splitCsv().flatMap { taxid ->
+            KRAKENTOOLS_EXTRACTKRAKENREADS(taxid, kraken2_results, reads, kraken2_report)
+            }
         }
     }
-
-
 
 
     //
