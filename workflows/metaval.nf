@@ -75,12 +75,13 @@ workflow METAVAL {
             KRAKENTOOLS_EXTRACTKRAKENREADS(params.taxid, kraken2_results, reads, kraken2_report)
         } else {
             kraken2_taxids = EXTRACT_VIRAL_TAXID(kraken2_taxpasta)
-            kraken2_taxids.viral_taxid.splitCsv().flatMap { taxid ->
-            KRAKENTOOLS_EXTRACTKRAKENREADS(taxid, kraken2_results, reads, kraken2_report)
+            KRAKENTOOLS_EXTRACTKRAKENREADS(
+                kraken2_taxids.viral_taxid.splitCsv().flatMap(),
+                kraken2_results,
+                reads,
+                kraken2_report)
             }
         }
-    }
-
 
     //
     // MODULE: Run FastQC
