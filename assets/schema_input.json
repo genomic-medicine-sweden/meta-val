@@ -12,7 +12,7 @@
                 "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["sample"]
+                "meta": ["id"]
             },
             "run_accession": {
                 "type": "string",
@@ -52,7 +52,15 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.kraken2\\.kraken2\\.classifiedreads\\.txt$",
-                "errorMessage": "Kraken2 classification results must be provided."
+                "errorMessage": "Kraken2 classification results must be provided.",
+                "dependentRequired": ["kraken2_report"]
+            },
+            "kraken2_taxpasta": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Standardized kraken2 profiling with taxonomic information obtained from taxpasta.",
+                "dependentRequired": ["kraken2_report", "kraken2_result"]
             },
             "centrifuge_report": {
                 "type": "string",
@@ -64,7 +72,15 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.centrifuge.results.txt$",
-                "errorMessage": "Centrifuge result file must be provided and it should contain eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches."
+                "errorMessage": "Centrifuge result file must be provided and it should contain eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches.",
+                "dependentRequired": ["centrifuge_report"]
+            },
+            "centrifuge_taxpasta": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Standardized centrifuge profiling with taxonomic information obtained from taxpasta.",
+                "dependentRequired": ["centrifuge_report", "centrifuge_result"]
             },
             "diamond": {
                 "type": "string",
@@ -76,7 +92,8 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.tsv$",
-                "errorMessage": "Standardized diamond profiling with taxonomic information obtained from taxpasta."
+                "errorMessage": "Standardized diamond profiling with taxonomic information obtained from taxpasta.",
+                "dependentRequired": ["diamond"]
             }
         },
         "required": ["sample", "run_accession", "instrument_platform", "fastq_1"]

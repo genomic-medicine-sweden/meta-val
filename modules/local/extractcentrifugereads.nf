@@ -22,7 +22,7 @@ process EXTRACTCENTRIFUGEREADS {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    awk -v taxID=$taxid '$3 == taxID && $8 == 1 {print $1}' $results > readID.txt
+    awk -v taxID=$taxid '\$3 == taxID && \$8 == 1 {print \$1}' $results > readID.txt
     if (${meta.single_end}) {
         seqkit grep -f readID.txt $fastq > ${prefix}_${taxid}.extracted_centrifuge_read.fastq
     } else {

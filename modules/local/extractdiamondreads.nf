@@ -22,7 +22,7 @@ process EXTRACTCDIAMONDREADS {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    awk '$2 == $taxid {print $1}' $tsv > readID.txt
+    awk '\$2 == $taxid {print \$1}' $tsv > readID.txt
     if (${meta.single_end}) {
         seqkit grep -f readID.txt $fastq > ${prefix}_${taxid}.extracted_diamond_read.fastq
     } else {
