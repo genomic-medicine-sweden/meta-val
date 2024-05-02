@@ -12,7 +12,7 @@ process EXTRACT_VIRAL_TAXID {
     tuple val(meta), path(taxpasta_standardised_profile)
 
     output:
-    tuple val(meta), path("*viral_taxids.tsv"), emit: viral_taxid
+    tuple val(meta), path("*viral_taxids.tsv"), optional:true, emit: viral_taxid
     path "versions.yml", emit: versions
 
     when:
@@ -22,7 +22,11 @@ process EXTRACT_VIRAL_TAXID {
     def prefix = task.ext.prefix ?: "${meta.id}_${meta.tool}"
 
     """
-    grep -i "virus" $taxpasta_standardised_profile | cut -f 1 > ${prefix}_viral_taxids.tsv
+    if grep -qi "virus" $taxpasta_standardised_profile; then
+        grep -i "virus" $taxpasta_standardised_profile | cut -f 1 > ${prefix}_viral_taxids.tsv
+    else
+        echo "No viral taxids found." > "no_viral_taxid.txt"
+    fi
 
 
     cat <<-END_VERSIONS > versions.yml
