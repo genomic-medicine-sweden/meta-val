@@ -10,6 +10,7 @@ process EXTRACT_VIRAL_TAXID {
 
     input:
     tuple val(meta), path(taxpasta_standardised_profile)
+    tuple val(meta), path(report) // classification report
 
     output:
     tuple val(meta), path("*viral_taxids.tsv"), optional:true, emit: viral_taxid
@@ -23,12 +24,17 @@ process EXTRACT_VIRAL_TAXID {
 
     """
     if grep -qi "virus" $taxpasta_standardised_profile; then
-        grep -i "virus" $taxpasta_standardised_profile | cut -f 1 > ${prefix}_viral_taxids.tsv
+        grep -i "virus" $taxpasta_standardised_profile | cut -f 1 > taxpasta_viral_taxid.txt
+        if [[ "${meta.tool}" == "kraken2" || "${meta.tool}" == "centrifuge" ]]; then
+            awk -F'\t' '\$3 != 0 {print \$5}' ${report} > detected_taxid.txt
+            grep -F -w -f taxpasta_viral_taxid.txt detected_taxid.txt > ${prefix}_viral_taxids.tsv
+        elif [[ "${meta.tool}" == "diamond" ]]; then
+            cut -f 2 $taxpasta_standardised_profile | uniq > detected_taxid.txt
+            grep -F -w -f taxpasta_viral_taxid.txt detected_taxid.txt > ${prefix}_viral_taxids.tsv
+        fi
     else
         echo "No viral taxids found." > "no_viral_taxid.txt"
     fi
-
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         seqkit: \$( seqkit version | sed 's/seqkit v//' )

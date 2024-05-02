@@ -54,8 +54,8 @@ workflow METAVAL {
         it[0]['single_end'] = (it[1] && !it[2] && it[0]['instrument_platform'] != 'OXFORD_NANOPORE')
         def new_meta = it[0] + [tool: "kraken2"]
         kraken2_taxpasta: [new_meta, it[5]]
-        kraken2_result: [it[0], it[4]]
-        kraken2_report: [it[0], it[3]]
+        kraken2_result: [new_meta, it[4]]
+        kraken2_report: [new_meta, it[3]]
     }
 
     if (params.extract_kraken2_reads) {
@@ -67,22 +67,19 @@ workflow METAVAL {
                 ch_input_for_kraken2.kraken2_report
             )
         } else {
-            kraken2_taxids = EXTRACT_VIRAL_TAXID(ch_input_for_kraken2.kraken2_taxpasta)
+            kraken2_taxids = EXTRACT_VIRAL_TAXID(ch_input_for_kraken2.kraken2_taxpasta, ch_input_for_kraken2.kraken2_report)
             combined_input = kraken2_taxids.viral_taxid
-                .map {meta,taxid -> [meta.subMap(meta.keySet() - 'tool'), taxid]}
                 .splitText()
                 .combine(ch_input_for_kraken2.kraken2_result,by:0)
-                .combine(ch_reads,by:0)
+                .combine(ch_reads.map {meta,reads -> [meta+[tool:"kraken2"],reads]},by:0)
                 .combine(ch_input_for_kraken2.kraken2_report,by:0)
 
             ch_combined_input = combined_input.multiMap { meta,taxid,kraken2_result,reads,kraken2_report  ->
-                taxid: [taxid.trim()]
+                taxid: taxid.trim()
                 kraken2_result: [meta, kraken2_result]
                 reads: [meta, reads]
                 kraken2_report: [meta, kraken2_report]
             }
-
-            //ch_combined_input.taxid.view()
             KRAKENTOOLS_EXTRACTKRAKENREADS(
                 ch_combined_input.taxid,
                 ch_combined_input.kraken2_result,
