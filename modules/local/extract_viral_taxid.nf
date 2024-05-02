@@ -12,7 +12,7 @@ process EXTRACT_VIRAL_TAXID {
     tuple val(meta), path(taxpasta_standardised_profile)
 
     output:
-    path("*viral_taxids.tsv"), emit: viral_taxid
+    tuple val(meta), path("*viral_taxids.tsv"), emit: viral_taxid
     path "versions.yml", emit: versions
 
     when:
