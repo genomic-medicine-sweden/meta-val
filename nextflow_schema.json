@@ -24,7 +24,7 @@
                     "fa_icon": "fas fa-file-csv"
                 },
                 "taxid": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The taxonomy ID of the species identified in classifications."
                 },
                 "viral_pathogen_genome": {
