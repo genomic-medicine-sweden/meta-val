@@ -29,8 +29,8 @@ process EXTRACT_VIRAL_TAXID {
             awk -F'\t' '\$3 != 0 {print \$5}' ${report} > detected_taxid.txt
             grep -F -w -f taxpasta_viral_taxid.txt detected_taxid.txt > ${prefix}_viral_taxids.tsv
         elif [[ "${meta.tool}" == "diamond" ]]; then
-            cut -f 2 $taxpasta_standardised_profile | uniq > detected_taxid.txt
-            grep -F -w -f taxpasta_viral_taxid.txt detected_taxid.txt > ${prefix}_viral_taxids.tsv
+            cut -f 2 ${report} | uniq > detected_taxid.txt
+            grep -F -w -f taxpasta_viral_taxid.txt detected_taxid.txt | uniq > ${prefix}_viral_taxids.tsv
         fi
     else
         echo "No viral taxids found." > "no_viral_taxid.txt"

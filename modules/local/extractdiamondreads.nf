@@ -22,13 +22,13 @@ process EXTRACTCDIAMONDREADS {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    awk '\$2 == $taxid {print \$1}' $tsv > readID.txt
-    if (${meta.single_end}) {
+    awk -v taxID=$taxid '\$2 == taxID {print \$1}' $tsv > readID.txt
+    if [ ${meta.single_end} == 'true' ]; then
         seqkit grep -f readID.txt $fastq > ${prefix}_${taxid}.extracted_diamond_read.fastq
-    } else {
+    elif [ "${meta.single_end}" == 'false' ]; then
         seqkit grep -f readID.txt ${fastq[0]} > ${prefix}_${taxid}.extracted_diamond_read1.fastq
         seqkit grep -f readID.txt ${fastq[1]} > ${prefix}_${taxid}.extracted_diamond_read2.fastq
-    }
+    fi
 
     rm readID.txt
 

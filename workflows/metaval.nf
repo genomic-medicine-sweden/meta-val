@@ -131,6 +131,46 @@ workflow METAVAL {
         }
     }
 
+    // extract diamond reads
+    ch_input_diamond = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+        meta.single_end = ( fastq_1 && !fastq_2 )
+        def new_meta = meta + [ tool: "diamond" ]
+        diamond_taxpasta: [ new_meta, diamond_taxpasta ]
+        diamond_tsv: [ new_meta, diamond ]
+        reads:[ new_meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+    }
+
+    if ( params.extract_diamond_reads ) {
+        if ( params.taxid ) {
+            EXTRACTCDIAMONDREADS(
+                params.taxid,
+                ch_input_diamond.diamond_tsv,
+                ch_input_diamond.reads
+            )
+            ch_versions            = ch_versions.mix( EXTRACTCDIAMONDREADS.out.versions )
+
+        } else {
+            diamond_taxids = EXTRACT_VIRAL_TAXID( ch_input_diamond.diamond_taxpasta, ch_input_diamond.diamond_tsv )
+            combined_input = diamond_taxids.viral_taxid
+                .splitText()
+                .combine( ch_input_diamond.diamond_tsv, by:0 )
+                .combine( ch_input_diamond.reads, by:0 )
+
+            ch_combined_input = combined_input.multiMap { meta,taxid,diamond,reads  ->
+                taxid: taxid.trim()
+                diamond_tsv: [ meta, diamond ]
+                reads: [ meta, reads ]
+            }
+
+            EXTRACTCDIAMONDREADS(
+                ch_combined_input.taxid,
+                ch_combined_input.diamond_tsv,
+                ch_combined_input.reads,
+            )
+            ch_versions            = ch_versions.mix( diamond_taxids.versions.first(), EXTRACTCDIAMONDREADS.out.versions )
+        }
+    }
+
     //
     // MODULE: Run FastQC
     //
