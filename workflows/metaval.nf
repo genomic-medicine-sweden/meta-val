@@ -36,43 +36,42 @@ workflow METAVAL {
     ch_input = ch_samplesheet.branch { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
 
         // Define single_end based on the conditions
-        meta.single_end = (fastq_1 && !fastq_2 && meta.instrument_platform != 'OXFORD_NANOPORE')
+        meta.single_end = (fastq_1 && !fastq_2)
 
         // reads channels
-        fastq: meta.single_end || fastq_2
+        short_reads: meta.instrument_platform != 'OXFORD_NANOPORE'
             return [meta, fastq_2 ? [fastq_1, fastq_2] : [fastq_1]]
 
-        nanopore: meta.instrument_platform == 'OXFORD_NANOPORE'
-            meta.single_end = true
+        long_reads: meta.instrument_platform == 'OXFORD_NANOPORE'
             return [meta, [fastq_1]]
     }
 
-    // combine reads
-    def ch_reads = ch_input.fastq.mix( ch_input.nanopore )
-
-    ch_input_for_kraken2 = ch_samplesheet.multiMap { it ->
-        it[0]['single_end'] = (it[1] && !it[2] && it[0]['instrument_platform'] != 'OXFORD_NANOPORE')
-        def new_meta = it[0] + [tool: "kraken2"]
-        kraken2_taxpasta: [new_meta, it[5]]
-        kraken2_result: [new_meta, it[4]]
-        kraken2_report: [new_meta, it[3]]
+    ch_input_kraken2 = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+        meta.single_end = (fastq_1 && !fastq_2)
+        def new_meta = meta + [tool: "kraken2"]
+        kraken2_taxpasta: [new_meta, kraken2_taxpasta]
+        kraken2_result: [new_meta, kraken2_result]
+        kraken2_report: [new_meta, kraken2_report]
+        reads:[new_meta, fastq_2 ? [fastq_1, fastq_2] : [fastq_1]]
     }
 
     if (params.extract_kraken2_reads) {
         if (params.taxid) {
             KRAKENTOOLS_EXTRACTKRAKENREADS(
-                taxid,
-                ch_input_for_kraken2.kraken2_result,
-                ch_reads,
-                ch_input_for_kraken2.kraken2_report
+                params.taxid,
+                ch_input_kraken2.kraken2_result,
+                ch_input_kraken2.reads,
+                ch_input_kraken2.kraken2_report
             )
+            ch_versions            = ch_versions.mix( kraken2_taxids.versions.first())
+
         } else {
-            kraken2_taxids = EXTRACT_VIRAL_TAXID(ch_input_for_kraken2.kraken2_taxpasta, ch_input_for_kraken2.kraken2_report)
+            kraken2_taxids = EXTRACT_VIRAL_TAXID(ch_input_kraken2.kraken2_taxpasta, ch_input_kraken2.kraken2_report)
             combined_input = kraken2_taxids.viral_taxid
                 .splitText()
-                .combine(ch_input_for_kraken2.kraken2_result,by:0)
-                .combine(ch_reads.map {meta,reads -> [meta+[tool:"kraken2"],reads]},by:0)
-                .combine(ch_input_for_kraken2.kraken2_report,by:0)
+                .combine(ch_input_kraken2.kraken2_result,by:0)
+                .combine(ch_input_kraken2.reads,by:0)
+                .combine(ch_input_kraken2.kraken2_report,by:0)
 
             ch_combined_input = combined_input.multiMap { meta,taxid,kraken2_result,reads,kraken2_report  ->
                 taxid: taxid.trim()
@@ -86,6 +85,7 @@ workflow METAVAL {
                 ch_combined_input.reads,
                 ch_combined_input.kraken2_report
             )
+            ch_versions            = ch_versions.mix( kraken2_taxids.versions.first(), KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions )
         }
     }
 
