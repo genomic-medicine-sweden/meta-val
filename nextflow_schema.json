@@ -32,7 +32,8 @@
                     "format": "file-path",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to a concatenated genome file containing all RefSeq viral genomes from a list of viral pathogens.",
-                    "fa_icon": "fas fa-file-csv"
+                    "fa_icon": "fas fa-file-csv",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/createtaxdb/data/fasta/haemophilus_influenzae.fna.gz"
                 },
                 "outdir": {
                     "type": "string",

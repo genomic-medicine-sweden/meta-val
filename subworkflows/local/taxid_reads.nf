@@ -5,7 +5,7 @@ include { KRAKENTOOLS_EXTRACTKRAKENREADS                  } from '../../modules/
 include { EXTRACTCENTRIFUGEREADS                          } from '../../modules/local/extractcentrifugereads'
 include { EXTRACTCDIAMONDREADS                            } from '../../modules/local/extractdiamondreads'
 
-workflow TAXID_READs {
+workflow TAXID_READS {
     params.taxid
 
     take:
@@ -54,7 +54,7 @@ workflow TAXID_READs {
                 ch_combined_input.reads,
                 ch_combined_input.kraken2_report
             )
-            ch_versions            = ch_versions.mix( kraken2_taxids.versions.first(), KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions.first() )
+            ch_versions            = ch_versions.mix( KRAKEN2_VIRAL_TAXID.out.versions.first(), KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions.first() )
         }
     }
 
@@ -87,7 +87,7 @@ workflow TAXID_READs {
                 ch_combined_input.centrifuge_result,
                 ch_combined_input.reads,
             )
-            ch_versions            = ch_versions.mix( centrifuge_taxids.versions.first(), EXTRACTCENTRIFUGEREADS.out.versions )
+            ch_versions            = ch_versions.mix( CENTRIFUGE_VIRAL_TAXID.out.versions.first(), EXTRACTCENTRIFUGEREADS.out.versions )
         }
     }
 
@@ -120,7 +120,7 @@ workflow TAXID_READs {
                 ch_combined_input.diamond_tsv,
                 ch_combined_input.reads,
             )
-            ch_versions            = ch_versions.mix( diamond_taxids.versions.first(), EXTRACTCDIAMONDREADS.out.versions )
+            ch_versions            = ch_versions.mix( DIAMOND_VIRAL_TAXID.out.versions.first(), EXTRACTCDIAMONDREADS.out.versions )
         }
     }
 

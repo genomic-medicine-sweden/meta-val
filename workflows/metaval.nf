@@ -14,7 +14,7 @@ include { EXTRACT_VIRAL_TAXID             } from '../modules/local/extract_viral
 include { KRAKENTOOLS_EXTRACTKRAKENREADS  } from '../modules/nf-core/krakentools/extractkrakenreads/main'
 include { EXTRACTCENTRIFUGEREADS          } from '../modules/local/extractcentrifugereads'
 include { EXTRACTCDIAMONDREADS            } from '../modules/local/extractdiamondreads'
-include { TAXID_READs                     } from '../subworkflows/local/taxid_reads.nf'
+include { TAXID_READS                     } from '../subworkflows/local/taxid_reads.nf'
 
 
 /*
@@ -64,7 +64,7 @@ workflow METAVAL {
     /*
         SUBWORKFLOW: TAXID_READS
     */
-    TAXID_READs (
+    TAXID_READS (
     ch_extract_reads.reads,
     ch_extract_reads.kraken2_taxpasta,
     ch_extract_reads.kraken2_result,
@@ -75,7 +75,7 @@ workflow METAVAL {
     ch_extract_reads.diamond_taxpasta,
     ch_extract_reads.diamond_tsv,
     )
-    ch_versions            = ch_versions.mix( TAXID_READs.out.versions )
+    ch_versions            = ch_versions.mix( TAXID_READS.out.versions )
     //
     // MODULE: Run FastQC
     //

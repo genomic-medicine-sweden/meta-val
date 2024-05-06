@@ -17,7 +17,7 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { METAVAL  } from './workflows/metaval'
+include { METAVAL  }                from './workflows/metaval'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_metaval_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_metaval_pipeline'
 
@@ -32,7 +32,7 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_meta
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow NFCORE_METAVAL {
+workflow GENOMICMEDICINESWEDEN_METAVAL {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -76,7 +76,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_METAVAL (
+    GENOMICMEDICINESWEDEN_METAVAL (
         PIPELINE_INITIALISATION.out.samplesheet
     )
 
@@ -90,7 +90,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_METAVAL.out.multiqc_report
+        GENOMICMEDICINESWEDEN_METAVAL.out.multiqc_report
     )
 }
 
