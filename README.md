@@ -16,9 +16,9 @@
 
 ## Introduction
 
-**genomic-medicine-sweden/metaval** is a bioinformatics pipeline constructed using the `nf-core` [template](https://nf-co.re/tools#creating-a-new-pipeline). The pipeline verifies the organisms predicted by the `nf-core/taxprofiler pipeline using metagenomic data, including both Illumina short-gun sequencing and Nanopore sequencing data.
+**genomic-medicine-sweden/metaval** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, which includes both Illumina shortgun sequencing and Nanopore sequencing data. At moment, `genomic-medicine-sweden/metaval` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
 
-At moment, `metaval` only checks the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
+The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#creating-a-new-pipeline), utilizing Docker/Singularity containers for easy installation and reproducible results. The implementation follows [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl1.html), employing one container per process for simplified maintenance and dependency management. Processes are sourced from [nf-core/modules](https://github.com/nf-core/modules) for broader accessibility within the Nextflow community.
 
 ## Pipeline summary
 
@@ -42,9 +42,9 @@ First, prepare a samplesheet with your input data that looks as follows:
 `samplesheet.csv`:
 
 ```csv
-sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_result,centrifuge_report,centrifuge_result,diamond
-sample1,run1,ILLUMINA,sample1.unmapped_1.fastq.gz,sample1.unmapped_2.fastq.gz,sample1.kraken2.kraken2.report.txt,sample1.kraken2.kraken2.classifiedreads.txt,sample1.centrifuge.txt,sample1.centrifuge.results.txt,sample1.diamond.tsv
-sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sample2.kraken2.kraken2.report.txt,sample2.kraken2.kraken2.classifiedreads.txt,sample2.centrifuge.txt,sample2.centrifuge.results.txt,sample2.diamond.tsv
+sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_result,kraken2_taxpasta,centrifuge_report,centrifuge_result,centrifuge_taxpasta,diamond,diamond_taxpasta
+sample1,run1,ILLUMINA,sample1.unmapped_1.fastq.gz,sample1.unmapped_2.fastq.gz,sample1.kraken2.kraken2.report.txt,sample1.kraken2.kraken2.classifiedreads.txt,kraken2_kraken2-db.tsv,sample1.centrifuge.txt,sample1.centrifuge.results.txt,centrifuge_centrifuge-db.tsv,sample1.diamond.tsv,diamond_diamond-db.tsv
+sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sample2.kraken2.kraken2.report.txt,sample2.kraken2.kraken2.classifiedreads.txt,kraken2_kraken2-db.tsv,sample2.centrifuge.txt,sample2.centrifuge.results.txt,centrifuge_centrifuge-db.tsv,sample2.diamond.tsv,diamond_diamond-db.tsv
 ```
 
 Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
@@ -52,7 +52,7 @@ Each row represents a fastq file (single-end) or a pair of fastq files (paired e
 Now, you can run the pipeline using:
 
 ```bash
-nextflow run main.nf \
+nextflow run genomic-medicine-sweden/metaval \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -63,7 +63,7 @@ nextflow run main.nf \
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
 > see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/metaval/usage) and the [parameter documentation](https://nf-co.re/metaval/parameters).
+For more details and further functionality, please refer to the [usage documentation](https://github.com/genomic-medicine-sweden/meta-val/blob/dev/docs/usage.md).
 
 ## Test data
 
@@ -123,13 +123,12 @@ SRR13439790.7	0	0
 
 ## Pipeline output
 
-To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/metaval/results) tab on the nf-core website pipeline page.
 For more details about the output files and reports, please refer to the
-[output documentation](https://nf-co.re/metaval/output).
+[output documentation](https://github.com/genomic-medicine-sweden/meta-val/blob/dev/docs/output.md).
 
 ## Credits
 
-nf-core/metaval was originally written by LilyAnderssonLee.
+genomic-medicine-sweden/metaval was originally written by [LilyAnderssonLee](https://github.com/LilyAnderssonLee). Additional contributors were [sofstam](https://github.com/sofstam), [lokeshbio](https://github.com/lokeshbio)
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -139,9 +138,11 @@ We thank the following people for their extensive assistance in the development 
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
-For further information or help, don't hesitate to get in touch on the [Slack `#metaval` channel](https://nfcore.slack.com/channels/metaval) (you can join with [this invite](https://nf-co.re/join/slack)).
+For further information or help, don't hesitate to get in touch by opening an [issue](https://github.com/genomic-medicine-sweden/meta-val/issues).
 
 ## Citations
+
+If you use genomic-medicine-sweden/meta-val for your analysis, pelase cite it using the following doi:xxxxx
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/metaval for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
@@ -149,6 +150,8 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 <!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
+
+This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/master/LICENSE).
 
 You can cite the `nf-core` publication as follows:
 

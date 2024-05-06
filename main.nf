@@ -1,11 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/metaval
+    genomic-medicine-sweden/metaval
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/metaval
-    Website: https://nf-co.re/metaval
-    Slack  : https://nfcore.slack.com/channels/metaval
+    Github : https://github.com/genomic-medicine-sweden/meta-val
 ----------------------------------------------------------------------------------------
 */
 

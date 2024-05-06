@@ -16,3 +16,8 @@ lint:
     - docs/README.md
     - pyproject.toml
 repository_type: pipeline
+template:
+  author: LilyAnderssonLee
+  description: nf-core/taxprofiler post processing
+  name: metaval
+  prefix: genomic-medicine-sweden
