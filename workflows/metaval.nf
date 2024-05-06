@@ -10,10 +10,11 @@ include { paramsSummaryMap                } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
-include {EXTRACT_VIRAL_TAXID              } from '../modules/local/extract_viral_taxid'
+include { EXTRACT_VIRAL_TAXID             } from '../modules/local/extract_viral_taxid'
 include { KRAKENTOOLS_EXTRACTKRAKENREADS  } from '../modules/nf-core/krakentools/extractkrakenreads/main'
 include { EXTRACTCENTRIFUGEREADS          } from '../modules/local/extractcentrifugereads'
 include { EXTRACTCDIAMONDREADS            } from '../modules/local/extractdiamondreads'
+include { TAXID_READs                     } from '../subworkflows/local/taxid_reads.nf'
 
 
 /*
@@ -46,131 +47,35 @@ workflow METAVAL {
             return [ meta, [ fastq_1 ] ]
     }
 
-    // extract kraken2 reads
-    ch_input_kraken2 = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+    // chaneels for extracting kraken2 reads
+    ch_extract_reads = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
         meta.single_end = ( fastq_1 && !fastq_2 )
-        def new_meta = meta + [ tool: "kraken2" ]
-        kraken2_taxpasta: [ new_meta, kraken2_taxpasta ]
-        kraken2_result: [ new_meta, kraken2_result ]
-        kraken2_report: [ new_meta, kraken2_report ]
-        reads:[ new_meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+        kraken2_taxpasta: [ meta + [ tool: "kraken2" ], kraken2_taxpasta ]
+        kraken2_report: [ meta + [ tool: "kraken2" ], kraken2_report ]
+        kraken2_result: [ meta, kraken2_result ]
+        reads:[ meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+        centrifuge_taxpasta: [ meta + [ tool: "centrifuge" ], centrifuge_taxpasta ]
+        centrifuge_report: [ meta + [ tool: "centrifuge" ], centrifuge_report ]
+        centrifuge_result: [ meta, centrifuge_result ]
+        diamond_taxpasta: [ meta + [ tool: "diamond" ], diamond_taxpasta ]
+        diamond_tsv: [ meta + [ tool: "diamond" ], diamond ]
     }
 
-    if ( params.extract_kraken2_reads ) {
-        if ( params.taxid ) {
-            KRAKENTOOLS_EXTRACTKRAKENREADS(
-                params.taxid,
-                ch_input_kraken2.kraken2_result,
-                ch_input_kraken2.reads,
-                ch_input_kraken2.kraken2_report
-            )
-            ch_versions            = ch_versions.mix( KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions.first() )
-
-        } else {
-            kraken2_taxids = EXTRACT_VIRAL_TAXID( ch_input_kraken2.kraken2_taxpasta, ch_input_kraken2.kraken2_report )
-            combined_input = kraken2_taxids.viral_taxid
-                .splitText()
-                .combine( ch_input_kraken2.kraken2_result, by:0 )
-                .combine( ch_input_kraken2.reads, by:0 )
-                .combine( ch_input_kraken2.kraken2_report, by:0 )
-
-            ch_combined_input = combined_input.multiMap { meta,taxid,kraken2_result,reads,kraken2_report  ->
-                taxid: taxid.trim()
-                kraken2_result: [ meta, kraken2_result ]
-                reads: [ meta, reads ]
-                kraken2_report: [ meta, kraken2_report ]
-            }
-            KRAKENTOOLS_EXTRACTKRAKENREADS(
-                ch_combined_input.taxid,
-                ch_combined_input.kraken2_result,
-                ch_combined_input.reads,
-                ch_combined_input.kraken2_report
-            )
-            ch_versions            = ch_versions.mix( kraken2_taxids.versions.first(), KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions.first() )
-        }
-    }
-
-    // extract centrifuge reads
-    ch_input_centrifuge = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
-        meta.single_end = ( fastq_1 && !fastq_2 )
-        def new_meta = meta + [ tool: "centrifuge" ]
-        centrifuge_taxpasta: [ new_meta, centrifuge_taxpasta ]
-        centrifuge_result: [ new_meta, centrifuge_result ]
-        centrifuge_report: [ new_meta, centrifuge_report ]
-        reads:[ new_meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
-    }
-
-    if ( params.extract_centrifuge_reads ) {
-        if ( params.taxid ) {
-            EXTRACTCENTRIFUGEREADS(
-                params.taxid,
-                ch_input_centrifuge.centrifuge_result,
-                ch_input_centrifuge.reads
-            )
-            ch_versions            = ch_versions.mix( EXTRACTCENTRIFUGEREADS.out.versions )
-
-        } else {
-            centrifuge_taxids = EXTRACT_VIRAL_TAXID( ch_input_centrifuge.centrifuge_taxpasta, ch_input_centrifuge.centrifuge_report )
-            combined_input = centrifuge_taxids.viral_taxid
-                .splitText()
-                .combine( ch_input_centrifuge.centrifuge_result, by:0 )
-                .combine( ch_input_centrifuge.reads, by:0 )
-
-            ch_combined_input = combined_input.multiMap { meta,taxid,centrifuge_result,reads  ->
-                taxid: taxid.trim()
-                centrifuge_result: [ meta, centrifuge_result ]
-                reads: [ meta, reads ]
-            }
-
-            EXTRACTCENTRIFUGEREADS(
-                ch_combined_input.taxid,
-                ch_combined_input.centrifuge_result,
-                ch_combined_input.reads,
-            )
-            ch_versions            = ch_versions.mix( centrifuge_taxids.versions.first(), EXTRACTCENTRIFUGEREADS.out.versions )
-        }
-    }
-
-    // extract diamond reads
-    ch_input_diamond = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
-        meta.single_end = ( fastq_1 && !fastq_2 )
-        def new_meta = meta + [ tool: "diamond" ]
-        diamond_taxpasta: [ new_meta, diamond_taxpasta ]
-        diamond_tsv: [ new_meta, diamond ]
-        reads:[ new_meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
-    }
-
-    if ( params.extract_diamond_reads ) {
-        if ( params.taxid ) {
-            EXTRACTCDIAMONDREADS(
-                params.taxid,
-                ch_input_diamond.diamond_tsv,
-                ch_input_diamond.reads
-            )
-            ch_versions            = ch_versions.mix( EXTRACTCDIAMONDREADS.out.versions )
-
-        } else {
-            diamond_taxids = EXTRACT_VIRAL_TAXID( ch_input_diamond.diamond_taxpasta, ch_input_diamond.diamond_tsv )
-            combined_input = diamond_taxids.viral_taxid
-                .splitText()
-                .combine( ch_input_diamond.diamond_tsv, by:0 )
-                .combine( ch_input_diamond.reads, by:0 )
-
-            ch_combined_input = combined_input.multiMap { meta,taxid,diamond,reads  ->
-                taxid: taxid.trim()
-                diamond_tsv: [ meta, diamond ]
-                reads: [ meta, reads ]
-            }
-
-            EXTRACTCDIAMONDREADS(
-                ch_combined_input.taxid,
-                ch_combined_input.diamond_tsv,
-                ch_combined_input.reads,
-            )
-            ch_versions            = ch_versions.mix( diamond_taxids.versions.first(), EXTRACTCDIAMONDREADS.out.versions )
-        }
-    }
-
+    /*
+        SUBWORKFLOW: TAXID_READS
+    */
+    TAXID_READs (
+    ch_extract_reads.reads,
+    ch_extract_reads.kraken2_taxpasta,
+    ch_extract_reads.kraken2_result,
+    ch_extract_reads.kraken2_report,
+    ch_extract_reads.centrifuge_taxpasta,
+    ch_extract_reads.centrifuge_result,
+    ch_extract_reads.centrifuge_report,
+    ch_extract_reads.diamond_taxpasta,
+    ch_extract_reads.diamond_tsv,
+    )
+    ch_versions            = ch_versions.mix( TAXID_READs.out.versions )
     //
     // MODULE: Run FastQC
     //
