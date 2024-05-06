@@ -5,8 +5,8 @@
   </picture>
 </h1>
 
-[![GitHub Actions CI Status](https://github.com/genomic-medicine-sweden/tomte/workflows/nf-core%20CI/badge.svg)](https://github.com/genomic-medicine-sweden/meta-val/actions?query=workflow%3A%22nf-core+CI%22)
-[![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/tomte/workflows/nf-core%20linting/badge.svg)](https://github.com/genomic-medicine-sweden/meta-val/actions?query=workflow%3A%22nf-core+linting%22)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/metaval/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![GitHub Actions CI Status](https://github.com/genomic-medicine-sweden/meta-val/workflows/nf-core%20CI/badge.svg)](https://github.com/genomic-medicine-sweden/meta-val/actions?query=workflow%3A%22nf-core+CI%22)
+[![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/meta-val/workflows/nf-core%20linting/badge.svg)](https://github.com/genomic-medicine-sweden/meta-val/actions?query=workflow%3A%22nf-core+linting%22)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/metaval/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
@@ -16,7 +16,7 @@
 
 ## Introduction
 
-**genomic-medicine-sweden/metaval** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, which includes both Illumina shortgun sequencing and Nanopore sequencing data. At moment, `genomic-medicine-sweden/metaval` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
+**genomic-medicine-sweden/meta-val** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, which includes both Illumina shortgun sequencing and Nanopore sequencing data. At moment, `genomic-medicine-sweden/meta-val` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
 
 The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#creating-a-new-pipeline), utilizing Docker/Singularity containers for easy installation and reproducible results. The implementation follows [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl1.html), employing one container per process for simplified maintenance and dependency management. Processes are sourced from [nf-core/modules](https://github.com/nf-core/modules) for broader accessibility within the Nextflow community.
 
@@ -52,7 +52,7 @@ Each row represents a fastq file (single-end) or a pair of fastq files (paired e
 Now, you can run the pipeline using:
 
 ```bash
-nextflow run genomic-medicine-sweden/metaval \
+nextflow run genomic-medicine-sweden/meta-val \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -128,7 +128,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-genomic-medicine-sweden/metaval was originally written by [LilyAnderssonLee](https://github.com/LilyAnderssonLee). Additional contributors were [sofstam](https://github.com/sofstam), [lokeshbio](https://github.com/lokeshbio)
+genomic-medicine-sweden/meta-val was originally written by [LilyAnderssonLee](https://github.com/LilyAnderssonLee). Additional contributors were [sofstam](https://github.com/sofstam), [lokeshbio](https://github.com/lokeshbio)
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 

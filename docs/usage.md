@@ -1,4 +1,4 @@
-# genomic-medicine-sweden/metaval: Usage
+# genomic-medicine-sweden/meta-val: Usage
 
 ## :warning: Please read this documentation on github website: [metaval usage](https://github.com/genomic-medicine-sweden/meta-val)
 
@@ -6,7 +6,7 @@
 
 ## Introduction
 
-**genomic-medicine-sweden/metaval** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, which includes both Illumina shortgun sequencing and Nanopore sequencing data. At moment, `genomic-medicine-sweden/metaval` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
+**genomic-medicine-sweden/meta-val** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, which includes both Illumina shortgun sequencing and Nanopore sequencing data. At moment, `genomic-medicine-sweden/meta-val` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
 
 The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#creating-a-new-pipeline), utilizing Docker/Singularity containers for easy installation and reproducible results. The implementation follows [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl1.html), employing one container per process for simplified maintenance and dependency management. Processes are sourced from [nf-core/modules](https://github.com/nf-core/modules) for broader accessibility within the Nextflow community.
 
@@ -27,7 +27,7 @@ This samplesheet is then specified on the command line as follows:
 --input '[path to samplesheet file]'
 ```
 
-genomic-medicine-sweden/metaval will requires the information given bellow.
+genomic-medicine-sweden/meta-val will requires the information given bellow.
 
 | Column              | Description                                                                                                                               |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -56,7 +56,7 @@ sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sa
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run genomic-medicine-sweden/metaval --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -100,14 +100,14 @@ You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-c
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 ```bash
-nextflow pull genomic-medicine-sweden/metaval
+nextflow pull genomic-medicine-sweden/meta-val
 ```
 
 ### Reproducibility
 
 It is a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [genomic-medicine-sweden/metaval releases page](https://github.com/genomic-medicine-sweden/meta-val/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
+First, go to the [genomic-medicine-sweden/meta-val releases page](https://github.com/genomic-medicine-sweden/meta-val/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
