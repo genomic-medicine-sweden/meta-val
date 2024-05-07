@@ -25,7 +25,7 @@
                 "type": "string",
                 "exists": true,
                 "enum": ["ILLUMINA", "OXFORD_NANOPORE"],
-                "errorMessage": "Suquencing platform must be provided.",
+                "errorMessage": "Sequencing platform must be provided.",
                 "meta": ["instrument_platform"]
             },
             "fastq_1": {
