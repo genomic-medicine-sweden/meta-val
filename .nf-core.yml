@@ -3,6 +3,7 @@ lint:
     - assets/nf-core-metaval_logo_light.png
     - docs/images/nf-core-metaval_logo_light.png
     - docs/images/nf-core-metaval_logo_dark.png
+    - nextflow.config
   files_unchanged: false
     - assets/sendmail_template.txt
     - .github/CONTRIBUTING.md
@@ -15,6 +16,10 @@ lint:
     - assets/email_template.txt
     - docs/README.md
     - pyproject.toml
+  nextflow_config:
+    - manifest.name
+    - manifest.homePage
+
 repository_type: pipeline
 template:
   author: LilyAnderssonLee

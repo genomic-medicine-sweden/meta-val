@@ -313,6 +313,10 @@
             "type": "boolean",
             "default": true,
             "description": "Extract classified diamond output by taxonomic ID."
+        },
+        "pipelines_testdata_base_path": {
+            "type": "string",
+            "default": "https://raw.githubusercontent.com/nf-core/test-datasets/createtaxdb"
         }
     }
 }
