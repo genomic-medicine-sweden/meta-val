@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/metaval pipeline
+// Subworkflow with functionality specific to the genomic-medicine-sweden/meta-val pipeline
 //
 
 /*

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/metaval/master/nextflow_schema.json",
-    "title": "nf-core/metaval pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/meta-val/master/nextflow_schema.json",
+    "title": "genomic-medicine-sweden/meta-val pipeline parameters",
     "description": "Validate the classification results obtained from taxprofiler.",
     "type": "object",
     "definitions": {
