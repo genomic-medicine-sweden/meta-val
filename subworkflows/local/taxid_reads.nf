@@ -25,11 +25,22 @@ workflow TAXID_READS {
     // extract kraken2 reads
     if ( params.extract_kraken2_reads ) {
         if ( params.taxid ) {
+            kraken2_params_taxid = kraken2_report.map { meta, kraken2_report -> [ meta.subMap(meta.keySet() - 'tool'), kraken2_report ] }
+                .combine ( Channel.of( params.taxid.split(" ") ) )
+                .combine( kraken2_result, by: 0 )
+                .combine( reads, by: 0)
+                .multiMap { meta, kraken2_report, taxid, kraken2_result, reads  ->
+                    taxid: taxid
+                    kraken2_result: [ meta, kraken2_result ]
+                    reads: [ meta, reads ]
+                    kraken2_report: [ meta, kraken2_report ]
+                    }
+
             KRAKENTOOLS_EXTRACTKRAKENREADS(
-                params.taxid,
-                kraken2_result,
-                reads,
-                kraken2_report
+                kraken2_params_taxid.taxid,
+                kraken2_params_taxid.kraken2_result,
+                kraken2_params_taxid.reads,
+                kraken2_params_taxid.kraken2_report
             )
             ch_versions            = ch_versions.mix( KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions.first() )
 
@@ -61,10 +72,19 @@ workflow TAXID_READS {
     // extract centrifuge reads
     if ( params.extract_centrifuge_reads ) {
         if ( params.taxid ) {
+            centrifuge_params_taxid = centrifuge_result
+                .combine( Channel.of( params.taxid.split(" ") ) )
+                .combine( reads, by: 0 )
+                .multiMap { meta, centrifuge_result, taxid, reads ->
+                    taxid: taxid
+                    centrifuge_result: [ meta, centrifuge_result ]
+                    reads: [ meta, reads ]
+                    }
+
             EXTRACTCENTRIFUGEREADS(
-                params.taxid,
-                centrifuge_result,
-                reads
+                centrifuge_params_taxid.taxid,
+                centrifuge_params_taxid.centrifuge_result,
+                centrifuge_params_taxid.reads
             )
             ch_versions            = ch_versions.mix( EXTRACTCENTRIFUGEREADS.out.versions )
 
@@ -93,10 +113,19 @@ workflow TAXID_READS {
     // extract diamond reads
     if ( params.extract_diamond_reads ) {
         if ( params.taxid ) {
+            diamond_params_taxid = diamond_tsv.map { meta, diamond_tsv -> [meta.subMap( meta.keySet() - 'tool' ), diamond_tsv ] }
+                .combine( Channel.of( params.taxid.split(" ") ))
+                .combine( reads, by:0)
+                .multiMap { meta, diamond_tsv, taxid, reads ->
+                    taxid: taxid
+                    diamond_tsv: [ meta, diamond_tsv ]
+                    reads: [ meta, reads ]
+                    }
+
             EXTRACTCDIAMONDREADS(
-                params.taxid,
-                diamond_tsv,
-                reads
+                diamond_params_taxid.taxid,
+                diamond_params_taxid.diamond_tsv,
+                diamond_params_taxid.reads
             )
             ch_versions            = ch_versions.mix( EXTRACTCDIAMONDREADS.out.versions )
 
