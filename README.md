@@ -1,7 +1,7 @@
 <h1>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-metaval_logo_dark.png">
-    <img alt="genomic-medicine-sweden/meta-val" src="docs/images/nf-core-metaval_logo_light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/metaval_logo_dark.png">
+    <img alt="genomic-medicine-sweden/meta-val" src="docs/images/metaval_logo_light.png">
   </picture>
 </h1>
 
@@ -22,15 +22,23 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 
 ## Pipeline summary
 
-1. Extract classified reads for organisms of interest, such as all identified viruses or a predefined list of organisms.
+<p align="center">
+     <img title="tomte workflow" src="docs/images/metaval_pipeline_metromap.png">
+</p>
 
-2. Use `BLAST` to identify the closet reference genome for the extracted reads.
+1. Extract viral taxIDs predicted by profilers.
 
-3. Map the extracted reads to reference genomes using `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
+2. Extract classified reads for organisms of interest, such as all identified viruses or a predefined list of organisms.
 
-4. Construct consensus maps for the mapped reads.
+3. Use `BLAST` to identify the closest reference genome for the extracted reads.
 
-5. Generate Coverage plots
+4. Map the extracted reads to reference genomes using `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
+
+5. Visualize using `IGV`.
+
+6. Perform quality check for target reads (`FASTQC` & `MultiQC`).
+
+7. Map reads to a list of viral pathogens genomes (`Bowtie2` or `minimap2`).
 
 ## Usage
 

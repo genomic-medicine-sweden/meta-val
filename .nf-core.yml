@@ -1,5 +1,8 @@
 lint:
   files_exist: false
+    - assets/nf-core-metaval_logo_light.png
+    - docs/images/nf-core-metaval_logo_light.png
+    - docs/images/nf-core-metaval_logo_dark.png
 
   files_unchanged: false
     - assets/sendmail_template.txt
@@ -13,9 +16,7 @@ lint:
     - assets/email_template.txt
     - docs/README.md
     - pyproject.toml
-    - assets/nf-core-metaval_logo_light.png
-    - docs/images/nf-core-metaval_logo_light.png
-    - docs/images/nf-core-metaval_logo_dark.png
+
   multiqc_config:
     - report_comment
 
