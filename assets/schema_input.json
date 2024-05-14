@@ -9,69 +9,25 @@
         "properties": {
             "sample": {
                 "type": "string",
-                "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["sample"]
-            },
-            "run_accession": {
-                "type": "string",
-                "exists": true,
-                "pattern": "^\\S+$",
-                "errorMessage": "Run accession must be provided and cannot contain spaces",
-                "meta": ["run_accession"]
-            },
-            "instrument_platform": {
-                "type": "string",
-                "exists": true,
-                "enum": ["ILLUMINA", "OXFORD_NANOPORE"],
-                "errorMessage": "Suquencing platform must be provided."
+                "meta": ["id"]
             },
             "fastq_1": {
                 "type": "string",
-                "exists": true,
                 "format": "file-path",
+                "exists": true,
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for short reads 1, long reads or merged pair-end reads must be provided from bowtie2 or minimap2 unmapped reads against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
+                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
             "fastq_2": {
                 "type": "string",
+                "format": "file-path",
                 "exists": true,
-                "format": "file-path",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "The FastQ file for short reads 2 resulting from Bowtie2's unmapped read 2 against the human genome, cannot contain spaces and must have the extension '.fq.gz' or '.fastq.gz'."
-            },
-            "kraken2_report": {
-                "type": "string",
-                "format": "file-path",
-                "pattern": "^\\S+\\.kraken2\\.kraken2\\.report\\.txt$",
-                "errorMessage": "Kraken2 classification report must be provided."
-            },
-            "kraken2_result": {
-                "type": "string",
-                "format": "file-path",
-                "pattern": "^\\S+\\.kraken2\\.kraken2\\.classifiedreads\\.txt$",
-                "errorMessage": "Kraken2 classification results must be provided."
-            },
-            "centrifuge_report": {
-                "type": "string",
-                "format": "file-path",
-                "pattern": "^\\S+\\.centrifuge.txt$",
-                "errorMessage": "Centrifuge kreport file must be provided."
-            },
-            "centrifuge_result": {
-                "type": "string",
-                "format": "file-path",
-                "pattern": "^\\S+\\.centrifuge.results.txt$",
-                "errorMessage": "Centrifuge result file must be provided and it should contain eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches."
-            },
-            "diamond": {
-                "type": "string",
-                "format": "file-path",
-                "pattern": "^\\S+\\.tsv$",
-                "errorMessage": "Diamond classification results should be provided."
+                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             }
         },
-        "required": ["sample", "run_accession", "instrument_platform", "fastq_1"]
+        "required": ["sample", "fastq_1"]
     }
 }
