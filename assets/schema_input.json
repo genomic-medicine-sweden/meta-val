@@ -36,7 +36,6 @@
             },
             "fastq_2": {
                 "type": "string",
-                "exists": true,
                 "format": "file-path",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "errorMessage": "The FastQ file for short reads 2 resulting from Bowtie2's unmapped read 2 against the human genome, cannot contain spaces and must have the extension '.fq.gz' or '.fastq.gz'."
