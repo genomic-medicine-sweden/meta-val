@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6d6e13f2ce1dfbf9fdf4d98909701f038bc175e1b9d1ca2f41b0e9d353bbabb1
-size 1132
+----------------------------------------------------
+                                        ,--./,-.
+        ___     __   __   __   ___     /,-._.--~\\
+  |\\ | |__  __ /  ` /  \\ |__) |__         }  {
+  | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
+                                        `._,._,'
+  nf-core/metaval ${version}
+----------------------------------------------------
+Run Name: $runName
+
+<% if (success){
+    out << "## nf-core/metaval execution completed successfully! ##"
+} else {
+    out << """####################################################
+## nf-core/metaval execution completed unsuccessfully! ##
+####################################################
+The exit status of the task that caused the workflow execution to fail was: $exitStatus.
+The full error message was:
+
+${errorReport}
+"""
+} %>
+
+
+The workflow was completed at $dateComplete (duration: $duration)
+
+The command used to launch the workflow was as follows:
+
+  $commandLine
+
+
+
+Pipeline Configuration:
+-----------------------
+<% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
+
+--
+nf-core/metaval
+https://github.com/nf-core/metaval
