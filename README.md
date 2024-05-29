@@ -68,7 +68,7 @@ For more details and further functionality, please refer to the [usage documenta
 
 ## Test data
 
-There are three test datasets within `assets/data/`, produced by the `nf-core/taxprofiler` pipeline
+There are three test datasets within `assets/test_data/`, produced by the `nf-core/taxprofiler` pipeline
 
 - `taxprofiler_test_data`: produced by executing the `test.config` file within the pipeline `nf-core/taxprofiler`.
 - `taxprofiler_test_full_data`: produced by executing the `test_full.config` file within the pipeline `nf-core/taxprofiler`.
