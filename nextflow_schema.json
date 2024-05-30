@@ -321,11 +321,6 @@
             "default": true,
             "description": "Extract classified diamond output by taxonomic ID."
         },
-        "pipelines_testdata_base_path": {
-            "type": "string",
-            "default": "https://raw.githubusercontent.com/nf-core/test-datasets/createtaxdb",
-            "description": "The path to the pathogen genome"
-        },
         "fastq_output": {
             "type": "boolean",
             "description": "Turn on saving extracted kraken2 reads in fastq format."
