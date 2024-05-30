@@ -33,9 +33,9 @@ indent_size = unset
 indent_style = unset
 
 # ignore left-padding spaces check for the test data
-[assets/data/taxprofiler_test_data/*]
+[assets/test_data/taxprofiler_test_data/*]
 indent_style = unset
 
-# ignore python
+# ignore python and markdown
 [*.{py,md}]
 indent_style = unset
