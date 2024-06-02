@@ -15,7 +15,6 @@ lint:
     - assets/email_template.html
     - assets/email_template.txt
     - docs/README.md
-    - pyproject.toml
 
   multiqc_config:
     - report_comment
