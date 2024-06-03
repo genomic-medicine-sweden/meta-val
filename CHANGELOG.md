@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+Extract taxIDs of viruses
+Extract Kraken2 reads with KrakenTools
+Extract Centrifuge reads
+Extract DIAMOND reads
+
 ### `Fixed`
 
 ### `Dependencies`

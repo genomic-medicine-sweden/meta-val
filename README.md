@@ -27,19 +27,55 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
      <img title="metaval workflow" src="docs/images/metaval_pipeline_metromap.png">
 </p>
 
-1. Extract viral taxIDs predicted by kraken2, centrifuge and DIAMOND classifiers.
+### Green Pipeline - Check the Existence of Predefined Viral Pathogens
 
-2. Extract classified reads for organisms of interest, such as all identified viruses or a predefined list of organisms.
+1. Map Reads to Viral Pathogen Genomes
 
-3. Use `BLAST` to identify the closest reference genome for the extracted reads.
+   - Map reads to a predefined list of viral pathogen genomes using `Bowtie2` for Illumina reads or `minimap2` for Nanopore reads. This step helps in checking the presence of known viral pathogens in the sample.
 
-4. Map the extracted reads to reference genomes using `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
+2. Use BLAST to Identify Target Reads
 
-5. Visualize using `IGV`.
+   - Use `BLAST` to identify the closest reference genomes for the extracted reads.
 
-6. Perform quality check for target reads (`FASTQC` & `MultiQC`).
+3. Extract Target Reads
 
-7. Map reads to a list of viral pathogens genomes (`Bowtie2` or `minimap2`).
+   - From the mapped reads, extract the target reads that match the predefined viral pathogens based on the result of `BLAST`.
+
+4. Visualize Using IGV
+
+   - Visualize the extracted reads using `IGV` (Integrative Genomics Viewer) to provide a graphical representation for detailed analysis.
+
+5. Perform Quality Check
+   - Conduct quality checks on the target reads using `FASTQC` and `MultiQC` to ensure data quality and reliability.
+
+### Orange Pipeline - Verify Identified Viruses
+
+1. Extract Viral TaxIDs
+
+   - Extract viral TaxIDs predicted by taxonomic classification tools such as `Kraken2`, `Centrifuge`, and `DIAMOND`.
+
+2. Extract Classified Reads
+
+   - Extract the reads classified as viruses based on the identified TaxIDs.
+
+3. BLAST
+
+   - Identify the closest reference genomes for the extracted reads using `BLAST`.
+
+4. Mapping
+
+   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`.
+
+5. Visualize Using IGV
+
+   - Visualize the mapped reads using `IGV`.
+
+6. Perform Quality Check
+   - Conduct quality checks on the classified reads using `FASTQC` and `MultiQC` to ensure the accuracy of the data.
+
+## Blue Pipeline - Verify User-Defined TaxIDs
+
+All steps are the same as the **Orange Pipeline** except using user-defined TaxIDs instead of extracting viral TaxIDs.
 
 ## Usage
 
@@ -80,7 +116,7 @@ There are three test datasets within `assets/test_data/`, produced by the `nf-co
 
 - `taxprofiler_test_data`: produced by executing the `test.config` file within the pipeline `nf-core/taxprofiler`.
 - `taxprofiler_test_full_data`: produced by executing the `test_full.config` file within the pipeline `nf-core/taxprofiler`.
-- `test_data_version2_subset`: produced by running the data downloaded from https://www.nature.com/articles/s41598-021-83812-x
+- `test_data_version2_subset`: produced by running the data downloaded from <https://www.nature.com/articles/s41598-021-83812-x>
 
 The corresponding input samplesheets are stored in `assets/`
 
@@ -93,41 +129,41 @@ The corresponding input samplesheets are stored in `assets/`
 `kraken2_report` & `centrifuge_report`
 
 ```csv
- 4.62	167021	167021	U	0	unclassified
- 95.38	3445908	335	R	1	root
- 95.36	3445179	323	R1	131567	  cellular organisms
- 93.28	3369988	622	D	2759	    Eukaryota
- 93.26	3369247	30	D1	33154	      Opisthokonta
+ 4.62 167021 167021 U 0 unclassified
+ 95.38 3445908 335 R 1 root
+ 95.36 3445179 323 R1 131567   cellular organisms
+ 93.28 3369988 622 D 2759     Eukaryota
+ 93.26 3369247 30 D1 33154       Opisthokonta
 ```
 
 `kraken2_result`
 
 ```csv
-C	SRR13439790.3	9606	150|150	9606:4 0:18 9606:7 0:5 9606:15 0:19 9606:9 0:2 9606:13 33154:1 9606:9 0:9 9606:5 |:| 9606:26 0:1 9606:3 0:32 9606:2 0:10 9606:3 0:21 9606:17 0:1
-C	SRR13439790.5	9606	103|103	9606:5 0:38 9606:5 0:3 9606:8 0:2 9606:8 |:| 9606:13 0:56
-C	SRR13439790.7	9606	150|150	9606:60 0:4 9606:1 0:1 9606:6 0:26 9606:2 0:7 9606:9 |:| 0:5 9606:1 0:44 9606:4 0:7 9606:1 0:21 9606:20 2759:4 9606:9
-C	SRR13439790.8	9606	107|107	0:3 9606:23 0:3 9606:14 0:16 9606:14 |:| 9606:3 0:51 9606:11 0:8
-C	SRR13439790.9	9606	101|150	0:48 9606:1 0:18 |:| 0:8 9606:5 0:103
+C SRR13439790.3 9606 150|150 9606:4 0:18 9606:7 0:5 9606:15 0:19 9606:9 0:2 9606:13 33154:1 9606:9 0:9 9606:5 |:| 9606:26 0:1 9606:3 0:32 9606:2 0:10 9606:3 0:21 9606:17 0:1
+C SRR13439790.5 9606 103|103 9606:5 0:38 9606:5 0:3 9606:8 0:2 9606:8 |:| 9606:13 0:56
+C SRR13439790.7 9606 150|150 9606:60 0:4 9606:1 0:1 9606:6 0:26 9606:2 0:7 9606:9 |:| 0:5 9606:1 0:44 9606:4 0:7 9606:1 0:21 9606:20 2759:4 9606:9
+C SRR13439790.8 9606 107|107 0:3 9606:23 0:3 9606:14 0:16 9606:14 |:| 9606:3 0:51 9606:11 0:8
+C SRR13439790.9 9606 101|150 0:48 9606:1 0:18 |:| 0:8 9606:5 0:103
 ```
 
 `centrifuge_result`
 
 ```csv
-readID	seqID	taxID	score	2ndBestScore	hitLength	queryLength	numMatches
-SRR13439790.3	NT_187391.1	9606	1624	557	109	300	1
-SRR13439790.5	NC_000022.11	9606	905	169	96	206	1
-SRR13439790.7	NC_000007.14	9606	6025	961	125	300	1
-SRR13439790.9	unclassified	0	0	0	0	251	1
+readID seqID taxID score 2ndBestScore hitLength queryLength numMatches
+SRR13439790.3 NT_187391.1 9606 1624 557 109 300 1
+SRR13439790.5 NC_000022.11 9606 905 169 96 206 1
+SRR13439790.7 NC_000007.14 9606 6025 961 125 300 1
+SRR13439790.9 unclassified 0 0 0 0 251 1
 ```
 
 `diamond`
 
 ```csv
-SRR13439790.3	0	0
-SRR13439790.3	0	0
-SRR13439790.5	0	0
-SRR13439790.5	0	0
-SRR13439790.7	0	0
+SRR13439790.3 0 0
+SRR13439790.3 0 0
+SRR13439790.5 0 0
+SRR13439790.5 0 0
+SRR13439790.7 0 0
 ```
 
 ## Pipeline output
