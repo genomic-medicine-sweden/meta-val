@@ -39,7 +39,7 @@ genomic-medicine-sweden/meta-val will requires the information given bellow.
 | kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                |
 | kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                               |
 | kraken2_taxpasta    | Standardized kraken2 taxonomic profiles for all samples.                                                                                  |
-| centrifuge_report   | File containing kraken-style report from centrifuge out files.                                                                            |
+| centrifuge_report   | File containing kraken-style report from centrifuge output files.                                                                            |
 | centrifuge_result   | File containing classification results.                                                                                                   |
 | centrifuge_taxpasta | Standardized centrifuge taxonomic profiles for all samples.                                                                               |
 | diamond             | Tab-separated file containing taxonomic classification of hits.                                                                           |
