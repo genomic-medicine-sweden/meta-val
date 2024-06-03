@@ -10,7 +10,7 @@ However, don't be put off by this template - other more general issues and sugge
 Contributions to the code are even more welcome ;)
 
 > [!NOTE]
-> If you need help using or modifying genomic-medicine-sweden/meta-val then the best place to ask is on the nf-core Slack [#metaval](https://nfcore.slack.com/channels/metaval) channel ([join our Slack here](https://nf-co.re/join/slack)).
+> If you need help using or modifying genomic-medicine-sweden/meta-val then the best place to ask is by creating an [issue](https://github.com/genomic-medicine-sweden/meta-val/issues).
 
 ## Contribution workflow
 
@@ -61,7 +61,7 @@ These tests are run both with the latest available version of `Nextflow` and als
 
 ## Getting help
 
-For further information/help, please consult the [genomic-medicine-sweden/meta-val documentation](https://nf-co.re/metaval/usage) and don't hesitate to get in touch on the nf-core Slack [#metaval](https://nfcore.slack.com/channels/metaval) channel ([join our Slack here](https://nf-co.re/join/slack)).
+For further information/help, please consult the [metaval documentation](https://github.com/genomic-medicine-sweden/meta-val) and don't hesitate to get in touch on by creating an [issue](https://github.com/genomic-medicine-sweden/meta-val/issues).
 
 ## Pipeline contribution conventions
 
