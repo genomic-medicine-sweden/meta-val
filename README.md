@@ -27,7 +27,7 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
      <img title="metaval workflow" src="docs/images/metaval_pipeline_metromap.png">
 </p>
 
-1. Extract viral taxIDs predicted by profilers.
+1. Extract viral taxIDs predicted by kraken2, centrifuge and DIAMOND classifiers.
 
 2. Extract classified reads for organisms of interest, such as all identified viruses or a predefined list of organisms.
 
