@@ -6,7 +6,7 @@
 
 ## Introduction
 
-**genomic-medicine-sweden/meta-val** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the organisms predicted by the nf-core/taxprofiler pipeline using metagenomic data, which includes both Illumina shortgun sequencing and Nanopore sequencing data. At moment, `genomic-medicine-sweden/meta-val` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
+**genomic-medicine-sweden/meta-val** is a bioinformatics pipeline for post-processing of [nf-core/taxprofiler](https://github.com/nf-core/taxprofiler) results. It verifies the classification results by the nf-core/taxprofiler pipeline. At the moment, `genomic-medicine-sweden/meta-val` only verifies the classification results from three classifiers `Kraken2`, `Centrifuge` and `diamond`.
 
 The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#creating-a-new-pipeline), utilizing Docker/Singularity containers for easy installation and reproducible results. The implementation follows [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl1.html), employing one container per process for simplified maintenance and dependency management. Processes are sourced from [nf-core/modules](https://github.com/nf-core/modules) for broader accessibility within the Nextflow community.
 
