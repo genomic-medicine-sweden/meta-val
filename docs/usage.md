@@ -27,7 +27,7 @@ This samplesheet is then specified on the command line as follows:
 --input '[path to samplesheet file]'
 ```
 
-genomic-medicine-sweden/meta-val will requires the information given bellow.
+genomic-medicine-sweden/meta-val will require the information given bellow.
 
 | Column              | Description                                                                                                                               |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
