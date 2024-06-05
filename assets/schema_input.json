@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/metaval/master/assets/schema_input.json",
-    "title": "nf-core/metaval pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/meta-val/master/assets/schema_input.json",
+    "title": "genomic-medicine-sweden/meta-val pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
@@ -12,7 +12,7 @@
                 "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["sample"]
+                "meta": ["id"]
             },
             "run_accession": {
                 "type": "string",
@@ -25,7 +25,8 @@
                 "type": "string",
                 "exists": true,
                 "enum": ["ILLUMINA", "OXFORD_NANOPORE"],
-                "errorMessage": "Suquencing platform must be provided."
+                "errorMessage": "Sequencing platform must be provided.",
+                "meta": ["instrument_platform"]
             },
             "fastq_1": {
                 "type": "string",
@@ -50,7 +51,15 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.kraken2\\.kraken2\\.classifiedreads\\.txt$",
-                "errorMessage": "Kraken2 classification results must be provided."
+                "errorMessage": "Kraken2 classification results must be provided.",
+                "dependentRequired": ["kraken2_report"]
+            },
+            "kraken2_taxpasta": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Standardized kraken2 profiling with taxonomic information obtained from taxpasta.",
+                "dependentRequired": ["kraken2_report", "kraken2_result"]
             },
             "centrifuge_report": {
                 "type": "string",
@@ -62,13 +71,28 @@
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.centrifuge.results.txt$",
-                "errorMessage": "Centrifuge result file must be provided and it should contain eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches."
+                "errorMessage": "Centrifuge result file must be provided and it should contain eight columns: readID, seqID, taxID, score, 2ndBestScore, hitLength, queryLength, numMatches.",
+                "dependentRequired": ["centrifuge_report"]
+            },
+            "centrifuge_taxpasta": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Standardized centrifuge profiling with taxonomic information obtained from taxpasta.",
+                "dependentRequired": ["centrifuge_report", "centrifuge_result"]
             },
             "diamond": {
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+\\.tsv$",
                 "errorMessage": "Diamond classification results should be provided."
+            },
+            "diamond_taxpasta": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Standardized diamond profiling with taxonomic information obtained from taxpasta.",
+                "dependentRequired": ["diamond"]
             }
         },
         "required": ["sample", "run_accession", "instrument_platform", "fastq_1"]

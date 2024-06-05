@@ -1,8 +1,8 @@
 lint:
   files_exist: false
-    - assets/nf-core-metaval_logo_light.png
-    - docs/images/nf-core-metaval_logo_light.png
-    - docs/images/nf-core-metaval_logo_dark.png
+    - assets/nf-core-meta-val_logo_light.png
+    - docs/images/nf-core-meta-val_logo_light.png
+    - docs/images/nf-core-meta-val_logo_dark.png
     - assets/samplesheet.csv
   files_unchanged: false
     - assets/sendmail_template.txt
@@ -15,6 +15,18 @@ lint:
     - assets/email_template.html
     - assets/email_template.txt
     - docs/README.md
-    - pyproject.toml
+
+  multiqc_config:
+    - report_comment
+
+  nextflow_config:
+    - manifest.name
+    - manifest.homePage
+
 repository_type: pipeline
+template:
+  author: LilyAnderssonLee
+  description: nf-core/taxprofiler post processing
+  name: metaval
+  prefix: genomic-medicine-sweden
 nf_core_version: "2.14.1"

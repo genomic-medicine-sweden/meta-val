@@ -4,12 +4,18 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
+include { FASTQC                          } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                         } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap                } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
+include { EXTRACT_VIRAL_TAXID             } from '../modules/local/extract_viral_taxid'
+include { KRAKENTOOLS_EXTRACTKRAKENREADS  } from '../modules/nf-core/krakentools/extractkrakenreads/main'
+include { EXTRACTCENTRIFUGEREADS          } from '../modules/local/extractcentrifugereads'
+include { EXTRACTCDIAMONDREADS            } from '../modules/local/extractdiamondreads'
+include { TAXID_READS                     } from '../subworkflows/local/taxid_reads.nf'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,14 +33,58 @@ workflow METAVAL {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+    // Create channels
+    ch_input = ch_samplesheet.branch { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+
+        // Define single_end based on the conditions
+        meta.single_end = ( fastq_1 && !fastq_2 )
+
+        // reads channels
+        short_reads: meta.instrument_platform != 'OXFORD_NANOPORE'
+            return [ meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+
+        long_reads: meta.instrument_platform == 'OXFORD_NANOPORE'
+            return [ meta, [ fastq_1 ] ]
+    }
+
+    // channels for extracting kraken2 reads
+    ch_extract_reads = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+        meta.single_end = ( fastq_1 && !fastq_2 )
+        kraken2_taxpasta: [ meta + [ tool: "kraken2" ], kraken2_taxpasta ]
+        kraken2_report: [ meta + [ tool: "kraken2" ], kraken2_report ]
+        kraken2_result: [ meta, kraken2_result ]
+        reads:[ meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+        centrifuge_taxpasta: [ meta + [ tool: "centrifuge" ], centrifuge_taxpasta ]
+        centrifuge_report: [ meta + [ tool: "centrifuge" ], centrifuge_report ]
+        centrifuge_result: [ meta, centrifuge_result ]
+        diamond_taxpasta: [ meta + [ tool: "diamond" ], diamond_taxpasta ]
+        diamond_tsv: [ meta + [ tool: "diamond" ], diamond ]
+    }
+
+    /*
+        SUBWORKFLOW: TAXID_READS
+    */
+    TAXID_READS (
+    ch_extract_reads.reads,
+    ch_extract_reads.kraken2_taxpasta,
+    ch_extract_reads.kraken2_result,
+    ch_extract_reads.kraken2_report,
+    ch_extract_reads.centrifuge_taxpasta,
+    ch_extract_reads.centrifuge_result,
+    ch_extract_reads.centrifuge_report,
+    ch_extract_reads.diamond_taxpasta,
+    ch_extract_reads.diamond_tsv,
+    )
+    ch_versions            = ch_versions.mix( TAXID_READS.out.versions )
+
     //
     // MODULE: Run FastQC
     //
-    //FASTQC (
-    //    ch_samplesheet
-    //)
-    //ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    //ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    FASTQC (
+        ch_extract_reads.reads
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // Collate and save software versions

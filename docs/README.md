@@ -1,6 +1,6 @@
-# nf-core/metaval: Documentation
+# genomic-medicine-sweden/meta-val: Documentation
 
-The nf-core/metaval documentation is split into the following pages:
+The genomic-medicine-sweden/meta-val documentation is split into the following pages:
 
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.
