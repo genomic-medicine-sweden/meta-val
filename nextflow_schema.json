@@ -25,7 +25,7 @@
                 },
                 "taxid": {
                     "type": "string",
-                    "description": "The taxonomy ID of the species identified in classification results."
+                    "description": "The taxonomy ID of the species identified in classification results. A list of taxids separated by spaces."
                 },
                 "viral_pathogen_genome": {
                     "type": "string",
@@ -323,7 +323,8 @@
         },
         "fastq_output": {
             "type": "boolean",
-            "description": "Turn on saving extracted kraken2 reads in fastq format."
+            "description": "Turn on saving extracted kraken2 reads in fastq format.",
+            "default": true
         }
     }
 }
