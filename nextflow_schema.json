@@ -25,7 +25,7 @@
                 },
                 "taxid": {
                     "type": "string",
-                    "description": "The taxonomy ID of the species identified in classification results. A list of taxids separated by spaces."
+                    "description": "The taxonomy ID of the species identified in the classification results or a list of taxids separated by spaces."
                 },
                 "viral_pathogen_genome": {
                     "type": "string",
