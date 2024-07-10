@@ -34,6 +34,13 @@
                     "description": "Path to a concatenated genome file containing complete genomes from a list of viral pathogens.",
                     "fa_icon": "fas fa-file-csv"
                 },
+                "perform_extract_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads assigned to taxonomic IDs.",
+                    "help_text": "Enable the option to extract reads assigned to taxonomic IDs based on the classification results from classifiers Kraken2, Centrifuge, and Diamond."
+                },
+
                 "extract_kraken2_reads": {
                     "type": "boolean",
                     "default": true,
@@ -53,6 +60,12 @@
                     "type": "boolean",
                     "description": "Turn on saving extracted kraken2 reads in fastq format.",
                     "default": true
+                },
+                "perform_screen_pathogens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Screen viral pathogens for each sample",
+                    "help_text": "Turns on the option to screen viral pathogens by mapping reads against genomes of a list of viral pathogens. Use BOWTIE2 for short reads and Minimap2 for long reads."
                 },
                 "outdir": {
                     "type": "string",
