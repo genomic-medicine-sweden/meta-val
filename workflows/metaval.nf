@@ -4,17 +4,24 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FASTQC                          } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                         } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap                } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
-include { EXTRACT_VIRAL_TAXID             } from '../modules/local/extract_viral_taxid'
-include { KRAKENTOOLS_EXTRACTKRAKENREADS  } from '../modules/nf-core/krakentools/extractkrakenreads/main'
-include { EXTRACTCENTRIFUGEREADS          } from '../modules/local/extractcentrifugereads'
-include { EXTRACTCDIAMONDREADS            } from '../modules/local/extractdiamondreads'
-include { TAXID_READS                     } from '../subworkflows/local/taxid_reads.nf'
+// Extract reads of taxIDs
+include { EXTRACT_VIRAL_TAXID                     } from '../modules/local/extract_viral_taxid'
+include { KRAKENTOOLS_EXTRACTKRAKENREADS          } from '../modules/nf-core/krakentools/extractkrakenreads/main'
+include { EXTRACTCENTRIFUGEREADS                  } from '../modules/local/extractcentrifugereads'
+include { EXTRACTCDIAMONDREADS                    } from '../modules/local/extractdiamondreads'
+include { TAXID_READS                             } from '../subworkflows/local/taxid_reads.nf'
+
+// Maping subworkflow
+include { BOWTIE2_BUILD as BOWTIE2_BUILD_PATHOGEN } from '../modules/nf-core/bowtie2/build/main'
+include { FASTQ_ALIGN_BOWTIE2                     } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
+
+// Summary subworkflow
+include { FASTQC                                  } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                                 } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap                        } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc                    } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML                  } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText                  } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
 
 
 /*
@@ -33,7 +40,7 @@ workflow METAVAL {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
-    // Create channels
+    // Create input channels
     ch_input = ch_samplesheet.branch { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
 
         // Define single_end based on the conditions
@@ -76,6 +83,26 @@ workflow METAVAL {
     ch_extract_reads.diamond_tsv,
     )
     ch_versions            = ch_versions.mix( TAXID_READS.out.versions )
+
+    /*
+        SUBWORKFLOW: Short reads pathogens screening
+    */
+    ch_reference = Channel.fromPath( params.pathogens_genome, checkIfExists: true)
+        .map{ file -> [ [ id: file.baseName ], file ] }
+    BOWTIE2_BUILD_PATHOGEN ( ch_reference )
+    ch_versions      = ch_versions.mix( BOWTIE2_BUILD_PATHOGEN.out.versions )
+    FASTQ_ALIGN_BOWTIE2 (
+        ch_input.short_reads,                              // ch_reads
+        BOWTIE2_BUILD_PATHOGEN.out.index,                  // ch_index
+        false,                                             // save unaligned
+        false,                                             // sort bam
+        ch_reference                                       // ch_fasta
+    )
+    ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
+
+    /*
+        SUBWORKFLOW: long reads pathogens screening
+    */
 
     //
     // MODULE: Run FastQC
