@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extract Kraken2 reads with KrakenTools
 - Extract Centrifuge reads
 - Extract DIAMOND reads
+- Screen pathogens via mapping against genomes from a list of pethogens: Bowtie2 for short reads and Minimap2 for long reads
 
 ### `Fixed`
 
