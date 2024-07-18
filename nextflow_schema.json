@@ -49,7 +49,7 @@
                 "extract_centrifuge_reads": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Extract classified centrifuge output by taxonomic ID."
+                    "description": "Extract reads classified by centrifuge according to taxonomic ID."
                 },
                 "extract_diamond_reads": {
                     "type": "boolean",
