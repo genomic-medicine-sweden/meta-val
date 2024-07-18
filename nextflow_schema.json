@@ -38,7 +38,7 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Extract reads assigned to taxonomic IDs.",
-                    "help_text": "Enable the option to extract reads assigned to taxonomic IDs based on the classification results from classifiers Kraken2, Centrifuge, and Diamond."
+                    "help_text": "Enable the option to extract reads assigned to taxonomic IDs based on results from Kraken2, Centrifuge, and Diamond classifiers."
                 },
 
                 "extract_kraken2_reads": {
