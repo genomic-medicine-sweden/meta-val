@@ -54,7 +54,7 @@
                 "extract_diamond_reads": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Extract classified diamond output by taxonomic ID."
+                    "description": "Extract reads classified by diamond according to taxonomic ID."
                 },
                 "fastq_output": {
                     "type": "boolean",
