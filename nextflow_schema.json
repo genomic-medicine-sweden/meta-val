@@ -44,7 +44,7 @@
                 "extract_kraken2_reads": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Extract classified Kraken2 output by taxonomic ID."
+                    "description": "Extract reads classified by kraken2 according to taxonomic ID."
                 },
                 "extract_centrifuge_reads": {
                     "type": "boolean",
