@@ -65,7 +65,7 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Screen viral pathogens for each sample",
-                    "help_text": "Turns on the option to screen viral pathogens by mapping reads against genomes of a list of viral pathogens. Use BOWTIE2 for short reads and Minimap2 for long reads."
+                    "help_text": "Turns on the option to screen viral pathogens by mapping reads against genomes of a list of viral pathogens. Bowtie2 is used for mapping of short reads and minimap2 for long reads."
                 },
                 "outdir": {
                     "type": "string",
