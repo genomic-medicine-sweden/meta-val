@@ -27,7 +27,7 @@
                     "type": "string",
                     "description": "The taxonomy ID of the species identified in the classification results or a list of taxids separated by spaces."
                 },
-                "pathogens_genome": {
+                "pathogens_genomes": {
                     "type": "string",
                     "format": "file-path",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
