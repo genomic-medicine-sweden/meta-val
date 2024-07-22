@@ -25,15 +25,47 @@
                 },
                 "taxid": {
                     "type": "string",
-                    "description": "The taxonomy ID of the species identified in classification results."
+                    "description": "The taxonomy ID of the species identified in the classification results or a list of taxids separated by spaces."
                 },
-                "viral_pathogen_genome": {
+                "pathogens_genomes": {
                     "type": "string",
                     "format": "file-path",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "description": "Path to a concatenated genome file containing all RefSeq viral genomes from a list of viral pathogens.",
-                    "fa_icon": "fas fa-file-csv",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/createtaxdb/data/fasta/haemophilus_influenzae.fna.gz"
+                    "description": "Path to a concatenated genome file containing complete genomes from a list of viral pathogens.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "perform_extract_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads assigned to taxonomic IDs.",
+                    "help_text": "Enable the option to extract reads assigned to taxonomic IDs based on results from Kraken2, Centrifuge, and Diamond classifiers."
+                },
+
+                "extract_kraken2_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads classified by kraken2 according to taxonomic ID."
+                },
+                "extract_centrifuge_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads classified by centrifuge according to taxonomic ID."
+                },
+                "extract_diamond_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads classified by diamond according to taxonomic ID."
+                },
+                "fastq_output": {
+                    "type": "boolean",
+                    "description": "Turn on saving extracted kraken2 reads in fastq format.",
+                    "default": true
+                },
+                "perform_screen_pathogens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Screen viral pathogens for each sample",
+                    "help_text": "Turns on the option to screen viral pathogens by mapping reads against genomes of a list of viral pathogens. Bowtie2 is used for mapping of short reads and minimap2 for long reads."
                 },
                 "outdir": {
                     "type": "string",
@@ -277,13 +309,6 @@
                     "description": "Validation of parameters in lenient more.",
                     "hidden": true,
                     "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
-                },
-                "pipelines_testdata_base_path": {
-                    "type": "string",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Base URL or local path to location of pipeline test dataset files",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
-                    "hidden": true
                 }
             }
         }
@@ -304,26 +329,5 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ],
-    "properties": {
-        "extract_kraken2_reads": {
-            "type": "boolean",
-            "default": true,
-            "description": "Extract classified Kraken2 output by taxonomic ID."
-        },
-        "extract_centrifuge_reads": {
-            "type": "boolean",
-            "default": true,
-            "description": "Extract classified centrifuge output by taxonomic ID."
-        },
-        "extract_diamond_reads": {
-            "type": "boolean",
-            "default": true,
-            "description": "Extract classified diamond output by taxonomic ID."
-        },
-        "fastq_output": {
-            "type": "boolean",
-            "description": "Turn on saving extracted kraken2 reads in fastq format."
-        }
-    }
+    ]
 }
