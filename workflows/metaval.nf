@@ -10,6 +10,14 @@ include { KRAKENTOOLS_EXTRACTKRAKENREADS            } from '../modules/nf-core/k
 include { EXTRACTCENTRIFUGEREADS                    } from '../modules/local/extractcentrifugereads'
 include { EXTRACTCDIAMONDREADS                      } from '../modules/local/extractdiamondreads'
 include { TAXID_READS                               } from '../subworkflows/local/taxid_reads'
+include { RM_EMPTY_FASTQ as RM_EMPTY_KRAKEN2        } from '../modules/local/rm_empty_fastq'
+include { RM_EMPTY_FASTQ as RM_EMPTY_CENTRIFUGE     } from '../modules/local/rm_empty_fastq'
+include { RM_EMPTY_FASTQ as RM_EMPTY_DIAMOND        } from '../modules/local/rm_empty_fastq'
+
+// De novo for extracted taxIDs reads
+include { SPADES                                    } from '../modules/nf-core/spades/main'
+include { SPADES as LONGREADS_SPADES                } from '../modules/nf-core/spades/main'
+include { FLYE                                      } from '../modules/nf-core/flye/main'
 
 // Maping subworkflow
 include { BOWTIE2_BUILD as BOWTIE2_BUILD_PATHOGEN   } from '../modules/nf-core/bowtie2/build/main'
@@ -86,11 +94,52 @@ workflow METAVAL {
         )
         ch_versions            = ch_versions.mix( TAXID_READS.out.versions )
     }
+    // Remove empty fastq files produced by extracting reads for user defined taxIDs
+    if (params.extract_kraken2_reads && params.taxid) {
+        RM_EMPTY_KRAKEN2(file("${params.outdir}/extracted_reads/kraken2"))
+    }
+    if (params.extract_centrifuge_reads && params.taxid) {
+        RM_EMPTY_CENTRIFUGE(file("${params.outdir}/extracted_reads/centrifuge"))
+    }
+    if (params.extract_diamond_reads && params.taxid) {
+        RM_EMPTY_DIAMOND(file("${params.outdir}/extracted_reads/diamond"))
+    }
+
+    /*
+        SUBWORKFLOW: DE NOVO
+    */
+    // SHORT READS: SPADES
+    // Filter out empty FASTQ files
+    ch_taxid_reads = TAXID_READS.out.reads.filter { meta, reads ->
+        def files = reads instanceof List ? reads: [ reads ] // type checking to ensure that reads is a list
+        files.findAll { filepath ->
+            def file = new java.io.File ( filepath.toString() ) //create file objects
+            file.size() > 0
+        }
+    }
+    // reads channels
+    ch_denovo_input = ch_taxid_reads.branch { meta, reads ->
+        shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE'
+            return [ meta, reads, [], [] ]
+        longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE'
+            return [ meta, reads ]
+    }
+
+    if (! params.skip_shortread_denovo ) {
+        SPADES(ch_denovo_input.shortreads_spades, [], [])
+        ch_versions             = ch_versions.mix( SPADES.out.versions.first() )
+    }
+
+    // LONG READS: SPADES | FLYE
+    if (! params.skip_longread_denovo) {
+        FLYE( ch_denovo_input.longreads_denovo, "--nano-raw" )
+        ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
+    }
 
     /*
         SUBWORKFLOW: Screen pathogens
     */
-    ch_reference = Channel.fromPath( params.pathogens_genome, checkIfExists: true)
+    ch_reference = Channel.fromPath( params.pathogens_genomes, checkIfExists: true)
         .map{ file -> [ [ id: file.baseName ], file ] }
     // Short reads
     if ( params.perform_screen_pathogens ) {
@@ -108,6 +157,11 @@ workflow METAVAL {
         LONGREAD_SCREENPATHOGEN ( ch_input.long_reads, ch_reference )
         ch_versions = ch_versions.mix( LONGREAD_SCREENPATHOGEN.out.versions )
     }
+
+    //
+    // SUBWORKFLOW: De novo assembly of pathogen reads
+    //
+
 
     //
     // MODULE: Run FastQC

@@ -40,7 +40,6 @@
                     "description": "Extract reads assigned to taxonomic IDs.",
                     "help_text": "Enable the option to extract reads assigned to taxonomic IDs based on results from Kraken2, Centrifuge, and Diamond classifiers."
                 },
-
                 "extract_kraken2_reads": {
                     "type": "boolean",
                     "default": true,
@@ -60,6 +59,23 @@
                     "type": "boolean",
                     "description": "Turn on saving extracted kraken2 reads in fastq format.",
                     "default": true
+                },
+                "skip_shortread_denovo": {
+                    "type": "boolean",
+                    "description": "Turn off de novo assembly for short reads",
+                    "default": true
+                },
+                "skip_longread_denovo": {
+                    "type": "boolean",
+                    "description": "Turn off de novo assembly for long reads",
+                    "default": true
+                },
+                "longread_denovo_tool": {
+                    "type": "string",
+                    "default": "flye",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify which tool to use for long reads de novo assembly",
+                    "help_text": "Flye is widely used for long-read de novo assembly, while SPAdes can also handle long reads. SPAdes is considered better for low-coverage long reads, whereas Flye excels with high-coverage long reads."
                 },
                 "perform_screen_pathogens": {
                     "type": "boolean",
