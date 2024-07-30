@@ -76,10 +76,10 @@ workflow METAVAL {
         diamond_tsv: [ meta + [ tool: "diamond" ], diamond ]
     }
 
-    /*
-        SUBWORKFLOW: TAXID_READS
-    */
+    // Verify whether the taxonomic IDs identified by classification are true or false positives.
     if ( params.perform_extract_reads ) {
+
+        // SUBWORKFLOW: TAXID_READS - extract reads
         TAXID_READS (
         ch_extract_reads.reads,
         ch_extract_reads.kraken2_taxpasta,
@@ -92,56 +92,51 @@ workflow METAVAL {
         ch_extract_reads.diamond_tsv,
         )
         ch_versions            = ch_versions.mix( TAXID_READS.out.versions )
-    }
-    // Remove empty fastq files produced by extracting reads for user defined taxIDs
-    if (params.extract_kraken2_reads && params.taxid) {
-        RM_EMPTY_KRAKEN2(file("${params.outdir}/extracted_reads/kraken2"))
-    }
-    if (params.extract_centrifuge_reads && params.taxid) {
-        RM_EMPTY_CENTRIFUGE(file("${params.outdir}/extracted_reads/centrifuge"))
-    }
-    if (params.extract_diamond_reads && params.taxid) {
-        RM_EMPTY_DIAMOND(file("${params.outdir}/extracted_reads/diamond"))
-    }
-
-    /*
-        SUBWORKFLOW: DE NOVO
-    */
-    // SHORT READS: SPADES
-    // Filter out empty FASTQ files
-    ch_taxid_reads = TAXID_READS.out.reads.filter { meta, reads ->
-        def files = reads instanceof List ? reads: [ reads ] // type checking to ensure that reads is a list
-        files.findAll { filepath ->
-            def file = new java.io.File ( filepath.toString() ) //create file objects
-            file.size() > 0
+        // Remove empty fastq files produced by extracting reads for user defined taxIDs
+        if (params.extract_kraken2_reads && params.taxid) {
+            RM_EMPTY_KRAKEN2(file("${params.outdir}/extracted_reads/kraken2"))
         }
-    }
-    // reads channels
-    ch_denovo_input = ch_taxid_reads.branch { meta, reads ->
-        shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE'
-            return [ meta, reads, [], [] ]
-        longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE'
-            return [ meta, reads ]
-    }
+        if (params.extract_centrifuge_reads && params.taxid) {
+            RM_EMPTY_CENTRIFUGE(file("${params.outdir}/extracted_reads/centrifuge"))
+        }
+        if (params.extract_diamond_reads && params.taxid) {
+            RM_EMPTY_DIAMOND(file("${params.outdir}/extracted_reads/diamond"))
+        }
 
-    if (! params.skip_shortread_denovo ) {
-        SPADES(ch_denovo_input.shortreads_spades, [], [])
-        ch_versions             = ch_versions.mix( SPADES.out.versions.first() )
-    }
+        // SUBWORKFLOW: DE NOVO
 
-    // LONG READS: SPADES | FLYE
-    if (! params.skip_longread_denovo) {
-        FLYE( ch_denovo_input.longreads_denovo, "--nano-raw" )
-        ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
-    }
+        // Filter out empty FASTQ files
+        ch_taxid_reads = TAXID_READS.out.reads.filter { meta, reads ->
+            def files = reads instanceof List ? reads: [ reads ] // type checking to ensure that reads is a list
+            files.findAll { filepath ->
+                def file = new java.io.File ( filepath.toString() ) //create file objects
+                file.size() > 0
+            }
+        }
+        // Prepare short and long reads channels
+        ch_denovo_input = ch_taxid_reads.branch { meta, reads ->
+            shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE'
+                return [ meta, reads, [], [] ]
+            longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE'
+                return [ meta, reads ]
+        }
+        // short reads de novo assembly
+        if (! params.skip_shortread_denovo ) {
+            SPADES(ch_denovo_input.shortreads_spades, [], [])
+            ch_versions             = ch_versions.mix( SPADES.out.versions.first() )
+        }
+        // long reads de novo assembly
+        if (! params.skip_longread_denovo) {
+            FLYE( ch_denovo_input.longreads_denovo, "--nano-raw" )
+            ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
+        }
+        }
 
-    /*
-        SUBWORKFLOW: Screen pathogens
-    */
+    // Screen pathogens
     ch_reference = Channel.fromPath( params.pathogens_genomes, checkIfExists: true)
         .map{ file -> [ [ id: file.baseName ], file ] }
-    // Short reads
     if ( params.perform_screen_pathogens ) {
+        // Map short reads to the pathogens genome
         BOWTIE2_BUILD_PATHOGEN ( ch_reference )
         ch_versions      = ch_versions.mix( BOWTIE2_BUILD_PATHOGEN.out.versions )
         FASTQ_ALIGN_BOWTIE2 (
@@ -152,15 +147,10 @@ workflow METAVAL {
             ch_reference                                       // ch_fasta
         )
         ch_versions = ch_versions.mix( FASTQ_ALIGN_BOWTIE2.out.versions )
-    // Long reads
+        // Map long reads to the pathogens genome
         LONGREAD_SCREENPATHOGEN ( ch_input.long_reads, ch_reference )
         ch_versions = ch_versions.mix( LONGREAD_SCREENPATHOGEN.out.versions )
     }
-
-    //
-    // SUBWORKFLOW: De novo assembly of pathogen reads
-    //
-
 
     //
     // MODULE: Run FastQC
