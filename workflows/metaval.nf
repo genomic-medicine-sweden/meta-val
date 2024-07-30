@@ -16,7 +16,6 @@ include { RM_EMPTY_FASTQ as RM_EMPTY_DIAMOND        } from '../modules/local/rm_
 
 // De novo for extracted taxIDs reads
 include { SPADES                                    } from '../modules/nf-core/spades/main'
-include { SPADES as LONGREADS_SPADES                } from '../modules/nf-core/spades/main'
 include { FLYE                                      } from '../modules/nf-core/flye/main'
 
 // Maping subworkflow
