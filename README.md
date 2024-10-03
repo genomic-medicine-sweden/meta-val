@@ -27,50 +27,62 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
      <img title="metaval workflow" src="docs/images/metaval_pipeline_metromap.png">
 </p>
 
-### Green Pipeline - Check the Existence of Predefined Viral Pathogens
+### Green Pipeline - Pathogen Screening Pipeline
 
-1. Map Reads to Viral Pathogen Genomes
+1. **Map reads to pathogen genomes**
 
-   - Map reads to a predefined list of viral pathogen genomes using `Bowtie2` for Illumina reads or `minimap2` for Nanopore reads. This step helps in checking the presence of known viral pathogens in the sample.
+   - Map reads to a predefined list of viral pathogen genomes using `Bowtie2` for Illumina reads or `minimap2` for Nanopore reads. This step checks for the presence of known pathogens in the sample.
 
-2. Use BLAST to Identify Target Reads
+2. **Call consensus**
 
-   - Use `BLAST` to identify the closest reference genomes for the extracted reads.
+   - This step generates consensus sequences for a large number of reads mapped to pathogen genomes using `samtools` for Illumina reads or `medaka` for Nanopore reads. The resulting consensus sequence will then be used as input for BLAST.
 
-3. Extract Target Reads
+3. **BLAST for pathogen identification**
+
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using `DIAMOND` based on a protein database, and `BLASTn` based on a nucleotide database.
+
+4. **Extract target reads**
 
    - From the mapped reads, extract the target reads that match the predefined viral pathogens based on the result of `BLAST`.
 
-4. Visualize Using IGV
+5. **Visualize using IGV**
 
    - Visualize the extracted reads using `IGV` (Integrative Genomics Viewer) to provide a graphical representation for detailed analysis.
 
-5. Perform Quality Check
+6. **Perform quality check**
    - Conduct quality checks on the target reads using `FASTQC` and `MultiQC` to ensure data quality and reliability.
 
 ### Orange Pipeline - Verify Identified Viruses
 
-1. Extract Viral TaxIDs
+1. **Decontamination**
+
+   - Decontaminate reads by filtering raw outputs from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND`, which may include false positives. This step compares results to the negative control and identifies likely present species based on user-defined thresholds.
+
+2. **Extract viral TaxIDs**
 
    - Extract viral TaxIDs predicted by taxonomic classification tools such as `Kraken2`, `Centrifuge`, and `DIAMOND`.
 
-2. Extract Classified Reads
+3. **Extract reads**
 
    - Extract the reads classified as viruses based on the identified TaxIDs.
 
-3. BLAST
+4. **de-novo assembly**
 
-   - Identify the closest reference genomes for the extracted reads using `BLAST`.
+   - This step performs de-novo assembly for TaxIDs containing a large number of reads. `Spades` is used for Illumina reads, and `Flye` is used for Nanopore reads. The resulting contig files will be used as input for `BLAST`.
 
-4. Mapping
+5. **BLAST**
 
-   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`.
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using `DIAMOND` based on a protein database, and `BLASTn` based on a nucleotide database.
 
-5. Visualize Using IGV
+6. **Mapping**
+
+   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`. Use `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
+
+7. **Visualize using IGV**
 
    - Visualize the mapped reads using `IGV`.
 
-6. Perform Quality Check
+8. **Perform quality check**
    - Conduct quality checks on the classified reads using `FASTQC` and `MultiQC` to ensure the accuracy of the data.
 
 ## Blue Pipeline - Verify User-Defined TaxIDs
