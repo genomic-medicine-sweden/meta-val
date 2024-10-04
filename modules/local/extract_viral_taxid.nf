@@ -14,7 +14,7 @@ process EXTRACT_VIRAL_TAXID {
 
     output:
     tuple val(meta), path("*viral_taxids.tsv"), optional:true, emit: viral_taxid
-    path "versions.yml",                             emit: versions
+    path "versions.yml"                                      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

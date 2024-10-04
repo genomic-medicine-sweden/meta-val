@@ -14,8 +14,8 @@ process EXTRACTCDIAMONDREADS {
     tuple val (meta), path(fastq) // bowtie2/align *unmapped_{1,2}.fastq.gz
 
     output:
-    tuple val(meta), path("*.fastq"), emit: extracted_diamond_reads
-    path "versions.yml", emit: versions
+    tuple val(meta), path("*.fastq"), optional:true, emit: extracted_diamond_reads
+    path "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
