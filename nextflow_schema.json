@@ -70,18 +70,17 @@
                     "description": "Turn off de novo assembly for long reads",
                     "default": true
                 },
-                "longread_denovo_tool": {
-                    "type": "string",
-                    "default": "flye",
-                    "fa_icon": "fas fa-hammer",
-                    "description": "Specify which tool to use for long reads de novo assembly",
-                    "help_text": "Flye is widely used for long-read de novo assembly, while SPAdes can also handle long reads. SPAdes is considered better for low-coverage long reads, whereas Flye excels with high-coverage long reads."
-                },
                 "perform_screen_pathogens": {
                     "type": "boolean",
                     "default": true,
                     "description": "Screen viral pathogens for each sample",
                     "help_text": "Turns on the option to screen viral pathogens by mapping reads against genomes of a list of viral pathogens. Bowtie2 is used for mapping of short reads and minimap2 for long reads."
+                },
+                "min_read_counts": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Set the read count threshold for performing de novo assembly or consensus calling.",
+                    "fa_icon": "fas fa-greater-than-equal"
                 },
                 "outdir": {
                     "type": "string",

@@ -113,21 +113,24 @@ workflow METAVAL {
                 file.size() > 0
             }
         }
-        // Prepare short and long reads channels
+        // Prepare reads for de-novo assembly
         ch_denovo_input = ch_taxid_reads.branch { meta, reads ->
-            shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE'
+            def files = reads instanceof List ? reads : [reads] // Ensure reads is a list
+            def count = files[0].countFastq()
+            shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE' && count > params.min_read_counts
                 return [ meta, reads, [], [] ]
-            longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE'
+            longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE' && count > params.min_read_counts
                 return [ meta, reads ]
         }
+
         // short reads de novo assembly
         if (! params.skip_shortread_denovo ) {
             SPADES(ch_denovo_input.shortreads_spades, [], [])
             ch_versions             = ch_versions.mix( SPADES.out.versions.first() )
         }
         // long reads de novo assembly
-        if (! params.skip_longread_denovo) {
-            FLYE( ch_denovo_input.longreads_denovo, "--nano-raw" )
+        if (! params.skip_longread_denovo ) {
+            FLYE( ch_denovo_input.longreads_denovo, "--nano-corr" )
             ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
         }
         }
