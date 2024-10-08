@@ -56,7 +56,7 @@ sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sa
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_extract_reads --extract_kraken2_reads
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -94,6 +94,28 @@ genome: 'GRCh37'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+### Decontanmination
+
+Filter the output files from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND` to remove false positives and background contamination can be activated with `--decontamination`. This step compares results to the negative control to identify likely present species based on user-defined thresholds, effecitively eliminating background noise from microbiome species.
+
+### Extract Viral TaxIDs
+
+This step extracts all taxonomic IDs of viral species predicted by classifers. Switching on by `--perform_extract_reads`
+
+### Extract Reads
+
+This step either pulls the reads of all viral TaxIDs predicted by classifiers or extracts reads from a user-defined list of TaxIDs separated by spaces when the `--taxid` option is activated. Extracting reads predicted by `Kraken2` can be activated with `--extract_kraken2_reads`, extracting reads predicted by `Centrifuge` can be activated with `--extract_centrifuge_reads` and extracting reads predicted by `DIAMOND` can be activated with `--extract_diamond_reads`.
+
+If the `--taxid` option is included in the command line, the pipeline will only extract reads for the specified TaxIDs, in other words, `--taxid` takes priority.
+
+### de-novo assembly
+
+De novo assembly can be performed for extracted reads of TaxIDs by disabling `--skip_shortread_denovo` for short reads or the `--skip_longread_denovo` option for long reads, provided the number of reads exceeds `params.min_read_counts`. The recommended minimum number of reads is 100. If there are too few reads, the process will fail.
+
+### Mapping
+
+To screen for the existence of pathogens in raw reads, map the raw reads to a pathogens genome database (`--pathogens_genomes`) by activating the `--perform_screen_pathogens` option. Use `Bowtie2` for short reads and `minimap2` for long reads.
 
 ### Updating the pipeline
 

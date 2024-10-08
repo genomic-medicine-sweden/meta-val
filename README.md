@@ -29,17 +29,19 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 
 ### Green Workflow - Pathogen Screening Pipeline
 
+This workflow is activated by enabling the `--perform_screen_pathogens` option.
+
 1. **Map reads to pathogen genomes**
 
-   - Map reads to a predefined list of viral pathogen genomes using `Bowtie2` for Illumina reads or `minimap2` for Nanopore reads. This step checks for the presence of known pathogens in the sample.
+   - Map reads to a predefined list of viral pathogen genomes using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/) for Illumina reads or [minimap2](https://github.com/lh3/minimap2) for Nanopore reads. This step checks for the presence of known pathogens in the sample.
 
 2. **Call consensus**
 
-   - This step generates consensus sequences for a large number of reads mapped to pathogen genomes using `samtools` for Illumina reads or `medaka` for Nanopore reads. The resulting consensus sequence will then be used as input for BLAST.
+   - This step generates consensus sequences for a large number of reads mapped to pathogen genomes using [samtools](<(http://www.htslib.org/)>) for Illumina reads or [medaka](https://github.com/nanoporetech/medaka) for Nanopore reads. The resulting consensus sequence will then be used as input for BLAST.
 
 3. **BLAST for pathogen identification**
 
-   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using `DIAMOND` based on a protein database, and `BLASTn` based on a nucleotide database.
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on a protein database, and [BLASTn](https://blast.ncbi.nlm.nih.gov/Blast.cgi) based on a nucleotide database.
 
 4. **Extract target reads**
 
@@ -50,17 +52,19 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
    - Visualize the extracted reads using `IGV` (Integrative Genomics Viewer) to provide a graphical representation for detailed analysis.
 
 6. **Perform quality check**
-   - Conduct quality checks on the target reads using `FASTQC` and `MultiQC` to ensure data quality and reliability.
+   - Conduct quality checks on the target reads using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](<(http://multiqc.info/)>) to ensure data quality and reliability.
 
 ### Orange Workflow - Verify Identified Viruses
 
+This workflow is activated by enabling the `--perform_extract_reads` option and disabling the `--taxid`.
+
 1. **Decontamination**
 
-   - Decontaminate reads by filtering the output files from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND`, which may include false positives. This step compares results to the negative control and identifies likely present species based on user-defined thresholds.
+   - Filter the output files from metagenomics classifiers like [Kraken2](https://ccb.jhu.edu/software/kraken2/), [Centrifuge](https://ccb.jhu.edu/software/centrifuge/), or [DIAMOND](https://github.com/bbuchfink/diamond) to remove false positives and background contaminations. This step compares results to the negative control and identifies likely present species based on user-defined thresholds.
 
 2. **Extract viral TaxIDs**
 
-   - Extract viral TaxIDs predicted by taxonomic classification tools such as `Kraken2`, `Centrifuge`, and `DIAMOND`.
+   - Extract **_viral_** TaxIDs predicted by taxonomic classification tools such as `Kraken2`, `Centrifuge`, and `DIAMOND`.
 
 3. **Extract reads**
 
@@ -68,24 +72,26 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 
 4. **de-novo assembly**
 
-   - This step performs de-novo assembly for TaxIDs containing a large number of reads. `Spades` is used for Illumina reads, and `Flye` is used for Nanopore reads. The resulting contig files will be used as input for `BLAST`.
+   - This step performs de-novo assembly for TaxIDs containing a large number of reads. [Spades](https://github.com/ablab/spades) is used for Illumina reads, and [Flye](https://github.com/mikolmogorov/Flye) is used for Nanopore reads. The resulting contig files will be used as input for `BLAST`.
 
 5. **BLAST**
 
-   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using `DIAMOND` based on a protein database, and `BLASTn` based on a nucleotide database.
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on a protein database, and [BLASTn](https://github.com/bbuchfink/diamond) based on a nucleotide database.
 
 6. **Mapping**
 
-   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`. Use `Bowtie2` for Illumina reads and `minimap2` for Nanopore reads.
+   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`. Use [Bowtie2](<(http://bowtie-bio.sourceforge.net/bowtie2/)>) for Illumina reads and [minimap2](https://github.com/lh3/minimap2) for Nanopore reads.
 
 7. **Visualize using IGV**
 
    - Visualize the mapped reads using `IGV`.
 
 8. **Perform quality check**
-   - Conduct quality checks on the classified reads using `FASTQC` and `MultiQC` to ensure the accuracy of the data.
+   - Conduct quality checks on the classified reads using [FastQC](<(https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)>) and [MultiQC](<(http://multiqc.info/)>) to ensure the accuracy of the data.
 
 ## Blue Workflow - Verify User-Defined TaxIDs
+
+This workflow is activated by enabling the `--perform_extract_reads` option and the `--taxid` option, allowing users to define a list of TaxIDs. It is not limited to `viral` TaxIDs and can include `bacteria`, `fungi`, `archaea`, `parasites`, or `plasmids`.
 
 All steps are the same as the **Orange Workflow** except using user-defined TaxIDs instead of extracting viral TaxIDs.
 
@@ -113,7 +119,7 @@ nextflow run genomic-medicine-sweden/meta-val \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
-   --run_kraken2 --run_centrifuge --run_diamond
+   --perform_extract_reads --extract_kraken2_reads
 ```
 
 > [!WARNING]
