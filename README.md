@@ -27,7 +27,7 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
      <img title="metaval workflow" src="docs/images/metaval_pipeline_metromap.png">
 </p>
 
-### Green workflow - Pathogen Screening Pipeline
+### Green Workflow - Pathogen Screening Pipeline
 
 1. **Map reads to pathogen genomes**
 
@@ -52,7 +52,7 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 6. **Perform quality check**
    - Conduct quality checks on the target reads using `FASTQC` and `MultiQC` to ensure data quality and reliability.
 
-### Orange workflow - Verify Identified Viruses
+### Orange Workflow - Verify Identified Viruses
 
 1. **Decontamination**
 
@@ -85,9 +85,9 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 8. **Perform quality check**
    - Conduct quality checks on the classified reads using `FASTQC` and `MultiQC` to ensure the accuracy of the data.
 
-## Blue Pipeline - Verify User-Defined TaxIDs
+## Blue Workflow - Verify User-Defined TaxIDs
 
-All steps are the same as the **Orange Pipeline** except using user-defined TaxIDs instead of extracting viral TaxIDs.
+All steps are the same as the **Orange Workflow** except using user-defined TaxIDs instead of extracting viral TaxIDs.
 
 ## Usage
 
