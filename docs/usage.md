@@ -111,7 +111,7 @@ If the `--taxid` option is included in the command line, the pipeline will only 
 
 ### de-novo assembly
 
-De novo assembly can be performed for extracted reads of TaxIDs by disabling `--skip_shortread_denovo` for short reads or the `--skip_longread_denovo` option for long reads, provided the number of reads exceeds `params.min_read_counts`. The recommended minimum number of reads is 100. If there are too few reads, the process will fail.
+De novo assembly can be performed for extracted reads of TaxIDs by disabling `--skip_shortread_denovo` for short reads or the `--skip_longread_denovo` option for long reads, provided the number of reads exceeds  the parameter `min_read_counts`. The recommended minimum number of reads is 100. If there are too few reads, the process will fail.
 
 ### Mapping
 
