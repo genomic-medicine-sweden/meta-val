@@ -56,7 +56,7 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 
 1. **Decontamination**
 
-   - Decontaminate reads by filtering raw outputs from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND`, which may include false positives. This step compares results to the negative control and identifies likely present species based on user-defined thresholds.
+   - Decontaminate reads by filtering the output files from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND`, which may include false positives. This step compares results to the negative control and identifies likely present species based on user-defined thresholds.
 
 2. **Extract viral TaxIDs**
 
