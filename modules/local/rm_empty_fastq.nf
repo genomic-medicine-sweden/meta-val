@@ -23,8 +23,4 @@ process RM_EMPTY_FASTQ {
 
     """
 
-
-
-
-
 }

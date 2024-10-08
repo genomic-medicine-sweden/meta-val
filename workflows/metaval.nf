@@ -130,7 +130,7 @@ workflow METAVAL {
         }
         // long reads de novo assembly
         if (! params.skip_longread_denovo ) {
-            FLYE( ch_denovo_input.longreads_denovo, "--nano-corr" )
+            FLYE( ch_denovo_input.longreads_denovo, params.flye_mode )
             ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
         }
         }
