@@ -15,7 +15,9 @@ lint:
     - assets/email_template.html
     - assets/email_template.txt
     - docs/README.md
+    - docs/usage.md
     - viralPathogenList.csv
+    - README.md
 
   multiqc_config:
     - report_comment
