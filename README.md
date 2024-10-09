@@ -93,7 +93,7 @@ This workflow is activated by enabling the `--perform_extract_reads` option and 
 
 This workflow is activated by enabling the `--perform_extract_reads` option and the `--taxid` option, allowing users to define a list of TaxIDs. It is not limited to `viral` TaxIDs and can include `bacteria`, `fungi`, `archaea`, `parasites`, or `plasmids`.
 
-All steps are the same as the **Orange Workflow** except using user-defined TaxIDs instead of extracting viral TaxIDs.
+All steps are the same as the **Orange Workflow** except using user-defined TaxIDs instead of extracting predefined viral TaxIDs.
 
 ## Usage
 
