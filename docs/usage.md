@@ -56,7 +56,7 @@ sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sa
 The example commands for running each workflow are as follows:
 
 ```bash
-# Blue Workflow - pathogen screening
+# Green Workflow - pathogen screening
 nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_screen_pathogens --pathogens_genomes /path/to/reference.fna --accession2taxid /path/to/accession2taxid.map
 
 # Orange Workflow - Verify Identified Viruses
