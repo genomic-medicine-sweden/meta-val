@@ -41,7 +41,7 @@ This workflow is activated by enabling the `--perform_screen_pathogens` option.
 
 3. **BLAST for pathogen identification**
 
-   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on a protein database, and [BLASTn](https://blast.ncbi.nlm.nih.gov/Blast.cgi) based on a nucleotide database.
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on the protein database, and [BLASTn](https://blast.ncbi.nlm.nih.gov/Blast.cgi) based on the nucleotide database.
 
 4. **Extract target reads**
 
