@@ -124,12 +124,12 @@ workflow METAVAL {
         }
 
         // short reads de novo assembly
-        if (! params.skip_shortread_denovo ) {
-            SPADES(ch_denovo_input.shortreads_spades, [], [])
+        if ( params.perform_shortread_denovo ) {
+            SPADES( ch_denovo_input.shortreads_spades, [], [] )
             ch_versions             = ch_versions.mix( SPADES.out.versions.first() )
         }
         // long reads de novo assembly
-        if (! params.skip_longread_denovo ) {
+        if ( params.perform_longread_denovo ) {
             FLYE( ch_denovo_input.longreads_denovo, params.flye_mode )
             ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
         }

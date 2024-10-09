@@ -68,14 +68,14 @@
                     "description": "Turn on saving extracted kraken2 reads in fastq format.",
                     "fa_icon": "fas fa-file-alt"
                 },
-                "skip_shortread_denovo": {
+                "perform_shortread_denovo": {
                     "type": "boolean",
-                    "description": "Turn off de novo assembly for short reads",
+                    "description": "Turn on de novo assembly for short reads",
                     "fa_icon": "fas fa-times"
                 },
-                "skip_longread_denovo": {
+                "perform_longread_denovo": {
                     "type": "boolean",
-                    "description": "Turn off de novo assembly for long reads",
+                    "description": "Turn on de novo assembly for long reads",
                     "fa_icon": "fas fa-times"
                 },
                 "flye_mode": {

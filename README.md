@@ -27,7 +27,7 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
      <img title="metaval workflow" src="docs/images/metaval_pipeline_metromap.png">
 </p>
 
-### Green Workflow - Pathogen Screening Pipeline
+### Green Workflow - Pathogen Screening
 
 This workflow is activated by enabling the `--perform_screen_pathogens` option.
 

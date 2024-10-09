@@ -53,10 +53,18 @@ sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sa
 
 ## Running the pipeline
 
-The typical command for running the pipeline is as follows:
+The example commands for running each workflow are as follows:
 
 ```bash
-nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_extract_reads --extract_kraken2_reads
+# Blue Workflow - pathogen screening
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_screen_pathogens --pathogens_genomes /path/to/reference.fna --accession2taxid /path/to/accession2taxid.map
+
+# Orange Workflow - Verify Identified Viruses
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_extract_reads --extract_kraken2_reads --extract_centrifuge_reads --extract_diamond_reads
+
+# Blue Workflow - Verify User-Defined TaxIDs
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --taxid 211044 2886042 --perform_extract_reads --extract_kraken2_reads --extract_centrifuge_reads --extract_diamond_reads
+
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -111,7 +119,7 @@ If the `--taxid` option is included in the command line, the pipeline will only 
 
 ### de-novo assembly
 
-De novo assembly can be performed for extracted reads of TaxIDs by disabling `--skip_shortread_denovo` for short reads or the `--skip_longread_denovo` option for long reads, provided the number of reads exceeds `params.min_read_counts`. The recommended minimum number of reads is 100. If there are too few reads, the process will fail.
+De-novo assembly can be performed for extracted reads of TaxIDs by enabling `--perform_shortread_denovo` for short reads or the `--perform_longread_denovo` option for long reads, provided the number of reads exceeds `params.min_read_counts`. The recommended minimum number of reads is 100. If there are too few reads, the process will fail.
 
 ### Mapping
 
