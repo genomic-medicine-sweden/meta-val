@@ -36,8 +36,8 @@ genomic-medicine-sweden/meta-val will require the information given bellow.
 | sample              | Unique sample name [required].                                                                                                            |
 | run_accession       | Run ID or name unique for each (pairs of) file(s). Can also supply sample name again here, if only a single run was generated [required]. |
 | instrument_platform | Sequencing platform reads generated on, selected from the EBI ENA controlled vocabulary [required].                                       |
-| fastq_1             | Unmapped human reads from bowtie2/minimap2. Gzipped compressed files accepted.                                                            |
-| fastq_2             | Unmapped human reads from bowtie2. Gzipped compressed files accepted.                                                                     |
+| fastq_1             | Unmapped human reads from bowtie2/minimap2, filtered reads from bbduk/(nanoq/FiltLong) or raw reads. Gzipped compressed files accepted.   |
+| fastq_2             | Unmapped human reads from bowtie2, filtered reads from bbduk/(nanoq/FiltLong) or raw reads. Gzipped compressed files accepted.            |
 | kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                |
 | kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                               |
 | kraken2_taxpasta    | Standardized kraken2 taxonomic profiles for all samples.                                                                                  |
@@ -133,7 +133,7 @@ This step extracts all taxonomic IDs of viral species predicted by classifers. S
 
 This step either retrieves the reads of all viral TaxIDs predicted by classifiers or extracts reads from a user-defined list of TaxIDs separated by spaces when the `--taxid` option is activated. Extracting reads predicted by `Kraken2` can be activated with `--extract_kraken2_reads`, extracting reads predicted by `Centrifuge` can be activated with `--extract_centrifuge_reads` and extracting reads predicted by `DIAMOND` can be activated with `--extract_diamond_reads`.
 
-If the `--taxid` option is included in the command line, the pipeline will only extract reads for the specified TaxIDs, in other words, `--taxid` takes priority.
+If the `--taxid` option is included in the command line, the pipeline will only extract reads for the user specified TaxIDs, in other words, `--taxid` takes priority.
 
 ### de-novo assembly
 

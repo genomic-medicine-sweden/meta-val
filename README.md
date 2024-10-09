@@ -72,7 +72,7 @@ This workflow is activated by enabling the `--perform_extract_reads` option and 
 
 4. **de-novo assembly**
 
-   - This step performs de-novo assembly for TaxIDs containing a large number of reads. [Spades](https://github.com/ablab/spades) is used for Illumina reads, and [Flye](https://github.com/mikolmogorov/Flye) is used for Nanopore reads. The resulting contig files will be used as input for `BLAST`.
+   - This step performs de novo assembly for TaxIDs with a number of reads exceeding `params.min_read_counts`. [Spades](https://github.com/ablab/spades) is used for Illumina reads, and [Flye](https://github.com/mikolmogorov/Flye) is used for Nanopore reads. The resulting contig files will be used as input for `BLAST`.
 
 5. **BLAST**
 
