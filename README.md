@@ -76,7 +76,7 @@ This workflow is activated by enabling the `--perform_extract_reads` option and 
 
 5. **BLAST**
 
-   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on a protein database, and [BLASTn](https://github.com/bbuchfink/diamond) based on a nucleotide database.
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on the protein database, and [BLASTn](https://github.com/bbuchfink/diamond) based on the nucleotide database.
 
 6. **Mapping**
 
