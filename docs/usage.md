@@ -17,7 +17,9 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 1. Install Nextflow (>=23.04.0) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
 2. Install one of the following technologies for full pipeline reproducibility: Docker, Singularity, Podman, Shifter or Charliecloud.
 
-## Samplesheet input
+## Input
+
+### Samplesheet
 
 You will need to create a samplesheet in csv format with information about the samples you would like to analyse before running the pipeline. It has to be a comma-separated file and a header row as shown in the examples below.
 
@@ -50,6 +52,22 @@ sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_
 sample1,run1,ILLUMINA,sample1.unmapped_1.fastq.gz,sample1.unmapped_2.fastq.gz,sample1.kraken2.kraken2.report.txt,sample1.kraken2.kraken2.classifiedreads.txt,kraken2_kraken2-db.tsv,sample1.centrifuge.txt,sample1.centrifuge.results.txt,centrifuge_centrifuge-db.tsv,sample1.diamond.tsv,diamond_diamond-db.tsv
 sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sample2.kraken2.kraken2.report.txt,sample2.kraken2.kraken2.classifiedreads.txt,kraken2_kraken2-db.tsv,sample2.centrifuge.txt,sample2.centrifuge.results.txt,centrifuge_centrifuge-db.tsv,sample2.diamond.tsv,diamond_diamond-db.tsv
 ```
+
+### Optional input
+
+#### Pathogen genome database
+
+A concatenated FASTA file containing all the pathogen genomes you are interested in.
+
+#### accession2taxid
+
+A file containing accession IDs of pathogens and their corresponding taxonomic IDs
+
+#### Blastn and/or Blastn database
+
+Use a custom database or download available [NCBI databases](https://ftp.ncbi.nlm.nih.gov/blast/db/). See the [documentation](https://ftp.ncbi.nlm.nih.gov/blast/documents/blastdb.html). To speed up the BLAST process, it is recommended to use the appropriate database. For example, for viruses, one could use `ref_viruses_rep_genomes` or `refseq_protein` instead of the `nt` or `nr` database.
+
+####
 
 ## Running the pipeline
 
