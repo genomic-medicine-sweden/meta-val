@@ -47,7 +47,7 @@ This workflow is activated by enabling the `--perform_screen_pathogens` option.
 
    - From the mapped reads, extract the target reads that match the predefined viral pathogens based on the result of `BLAST`.
 
-5. **Visualize using IGV**
+5. **Visualisation using IGV**
 
    - Visualize the extracted reads using `IGV` (Integrative Genomics Viewer) to provide a graphical representation for detailed analysis.
 
