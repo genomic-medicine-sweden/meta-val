@@ -82,7 +82,7 @@ This workflow is activated by enabling the `--perform_extract_reads` option and 
 
    - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`. Use [Bowtie2](<(http://bowtie-bio.sourceforge.net/bowtie2/)>) for Illumina reads and [minimap2](https://github.com/lh3/minimap2) for Nanopore reads.
 
-7. **Visualize using IGV**
+7. **Visualisation using IGV**
 
    - Visualize the mapped reads using `IGV`.
 
