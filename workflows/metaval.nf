@@ -129,7 +129,6 @@ workflow METAVAL {
                     return [ meta, reads ]
             }
             .set { ch_denovo_input }
-        ch_denovo_input.shortreads_spades.dump(tag:"shortreads")
 
         // short reads de novo assembly
         if ( params.perform_shortread_denovo ) {

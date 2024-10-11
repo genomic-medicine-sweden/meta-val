@@ -19,8 +19,8 @@ process SPADES {
     tuple val(meta), path('*.gene_clusters.fa.gz'), optional:true, emit: gene_clusters
     tuple val(meta), path('*.assembly.gfa.gz')    , optional:true, emit: gfa
     tuple val(meta), path('warnings.log')         , optional:true, emit: warnings
-    tuple val(meta), path('*.spades.log')         , emit: log
-    path  "versions.yml"                          , emit: versions
+    tuple val(meta), path('*.spades.log')         , optional:true, emit: log
+    path  "versions.yml"                          , optional:true, emit: versions
 
     when:
     task.ext.when == null || task.ext.when

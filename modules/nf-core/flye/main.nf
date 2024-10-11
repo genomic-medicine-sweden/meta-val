@@ -12,13 +12,13 @@ process FLYE {
     val mode
 
     output:
-    tuple val(meta), path("*.fasta.gz"), emit: fasta
-    tuple val(meta), path("*.gfa.gz")  , emit: gfa
-    tuple val(meta), path("*.gv.gz")   , emit: gv
-    tuple val(meta), path("*.txt")     , emit: txt
-    tuple val(meta), path("*.log")     , emit: log
-    tuple val(meta), path("*.json")    , emit: json
-    path "versions.yml"                , emit: versions
+    tuple val(meta), path("*.fasta.gz"), optional:true, emit: fasta
+    tuple val(meta), path("*.gfa.gz")  , optional:true, emit: gfa
+    tuple val(meta), path("*.gv.gz")   , optional:true, emit: gv
+    tuple val(meta), path("*.txt")     , optional:true, emit: txt
+    tuple val(meta), path("*.log")     , optional:true, emit: log
+    tuple val(meta), path("*.json")    , optional:true, emit: json
+    path "versions.yml"                , optional:true, emit: versions
 
     when:
     task.ext.when == null || task.ext.when
