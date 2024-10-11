@@ -5,7 +5,6 @@
 */
 
 // Extract reads of taxIDs
-include { EXTRACT_VIRAL_TAXID                       } from '../modules/local/extract_viral_taxid'
 include { KRAKENTOOLS_EXTRACTKRAKENREADS            } from '../modules/nf-core/krakentools/extractkrakenreads/main'
 include { EXTRACTCENTRIFUGEREADS                    } from '../modules/local/extractcentrifugereads'
 include { EXTRACTCDIAMONDREADS                      } from '../modules/local/extractdiamondreads'
@@ -106,22 +105,31 @@ workflow METAVAL {
         // SUBWORKFLOW: DE NOVO
 
         // Filter out empty FASTQ files
-        ch_taxid_reads = TAXID_READS.out.reads.filter { meta, reads ->
-            def files = reads instanceof List ? reads: [ reads ] // type checking to ensure that reads is a list
-            files.findAll { filepath ->
-                def file = new java.io.File ( filepath.toString() ) //create file objects
-                file.size() > 0
+        ch_taxid_reads_result = TAXID_READS.out.reads
+            .branch {
+                non_empty: it[0].single_end ? it[1].size() > 0 : it[1][0].size() > 0 || it[1][1].size() >0
+                empty: true
             }
-        }
-        // Prepare reads for de-novo assembly
-        ch_denovo_input = ch_taxid_reads.branch { meta, reads ->
-            def files = reads instanceof List ? reads : [reads] // Ensure reads is a list
-            def count = files[0].countFastq()
-            shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE' && count > params.min_read_counts
-                return [ meta, reads, [], [] ]
-            longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE' && count > params.min_read_counts
-                return [ meta, reads ]
-        }
+        ch_taxid_reads_result.non_empty.set { ch_taxid_reads }
+
+        // Skip the de-novo assembly if the number of reads is lower than params.min_read_counts
+        ch_taxid_reads
+            .branch {
+                failed: it[0].single_end ? it[1].countFastq() < params.min_read_counts : it[1][0].countFastq() < params.min_read_counts || it[1][1].countFastq() < params.min_read_counts
+                passed: true
+            }
+            .set { ch_taxid_reads_result }
+        ch_taxid_reads_result.passed.set { ch_taxid_reads_result_passed }
+        //Prepare reads for de-novo assembly
+        ch_taxid_reads_result_passed
+            .branch { meta, reads ->
+                shortreads_spades: meta.instrument_platform != 'OXFORD_NANOPORE'
+                    return [ meta, reads, [], [] ]
+                longreads_denovo: meta.instrument_platform == 'OXFORD_NANOPORE'
+                    return [ meta, reads ]
+            }
+            .set { ch_denovo_input }
+        ch_denovo_input.shortreads_spades.dump(tag:"shortreads")
 
         // short reads de novo assembly
         if ( params.perform_shortread_denovo ) {
@@ -133,6 +141,18 @@ workflow METAVAL {
             FLYE( ch_denovo_input.longreads_denovo, params.flye_mode )
             ch_versions             = ch_versions.mix( FLYE.out.versions.first() )
         }
+
+        // Warning message for samples that failed to run de novo assembly due to an insufficient number of reads
+        ch_taxid_reads_result.failed
+            .map { meta, reads -> [ meta.id ] }
+            .collect()
+            .subscribe {
+                samples = it.join("\n")
+                log.warn "The following samples skipped de novo assembly due to too few reads (<$params.min_read_counts). Run BLASTx/BLASTn directly with all reads.: \n$samples"
+            }
+
+        // BLAST
+
         }
 
     // Screen pathogens
