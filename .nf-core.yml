@@ -1,10 +1,10 @@
 lint:
-  files_exist: false
+  files_exist:
     - assets/nf-core-meta-val_logo_light.png
     - docs/images/nf-core-meta-val_logo_light.png
     - docs/images/nf-core-meta-val_logo_dark.png
     - assets/samplesheet.csv
-  files_unchanged: false
+  files_unchanged:
     - assets/sendmail_template.txt
     - .github/CONTRIBUTING.md
     - .github/ISSUE_TEMPLATE/bug_report.yml
@@ -15,7 +15,9 @@ lint:
     - assets/email_template.html
     - assets/email_template.txt
     - docs/README.md
+    - docs/usage.md
     - viralPathogenList.csv
+    - README.md
 
   multiqc_config:
     - report_comment
