@@ -61,13 +61,11 @@ A concatenated FASTA file containing all the pathogen genomes you are interested
 
 #### accession2taxid
 
-A file containing accession IDs of pathogens and their corresponding taxonomic IDs
+Users need to prepare a file containing accession IDs of pathogens and their corresponding taxonomic IDs
 
 #### Blastn and/or Blastn database
 
 Use a custom database or download available [NCBI databases](https://ftp.ncbi.nlm.nih.gov/blast/db/). See the [documentation](https://ftp.ncbi.nlm.nih.gov/blast/documents/blastdb.html). To speed up the BLAST process, it is recommended to use the appropriate database. For example, for viruses, one could use `ref_viruses_rep_genomes` or `refseq_protein` instead of the `nt` or `nr` database.
-
-####
 
 ## Running the pipeline
 
@@ -127,7 +125,7 @@ Filter the output files from metagenomics classifiers like `Kraken2`, `Centrifug
 
 ### Extract Viral TaxIDs
 
-This step extracts all taxonomic IDs of viral species predicted by classifers. Switching on by `--perform_extract_reads`
+This step involves extracting all taxonomic IDs of viral species predicted by classifiers by enabling `--perform_extract_reads`, while not specifying a taxonomic ID list with `--taxid`.
 
 ### Extract Reads
 
