@@ -1,14 +1,14 @@
 <!--
-# genomic-medicine-sweden/metaval pull request
+# genomic-medicine-sweden/meta-val pull request
 
-Many thanks for contributing to genomic-medicine-sweden/metaval!
+Many thanks for contributing to genomic-medicine-sweden/meta-val!
 
 Please fill in the appropriate checklist below (delete whatever is not relevant).
 These are the most common things requested on pull requests (PRs).
 
 Remember that PRs should be made against the dev branch, unless you're preparing a pipeline release.
 
-Learn more about contributing: [CONTRIBUTING.md](https://github.com/genomic-medicine-sweden/metaval/tree/master/.github/CONTRIBUTING.md)
+Learn more about contributing: [CONTRIBUTING.md](https://github.com/genomic-medicine-sweden/meta-val/tree/master/.github/CONTRIBUTING.md)
 -->
 
 ## PR checklist

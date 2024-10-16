@@ -1,8 +1,8 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/metaval/master/nextflow_schema.json",
-    "title": "genomic-medicine-sweden/metaval pipeline parameters",
-    "description": "nf-core/taxprofiler post processing",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/meta-val/master/nextflow_schema.json",
+    "title": "genomic-medicine-sweden/meta-val pipeline parameters",
+    "description": "Validate the classification results obtained from taxprofiler.",
     "type": "object",
     "$defs": {
         "input_output_options": {
@@ -20,8 +20,52 @@
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/metaval/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
+                },
+                "taxid": {
+                    "type": "string",
+                    "description": "The taxonomy ID of the species identified in the classification results or a list of taxids separated by spaces."
+                },
+                "pathogens_genomes": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "description": "Path to a concatenated genome file containing complete genomes from a list of viral pathogens.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "perform_extract_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads assigned to taxonomic IDs.",
+                    "help_text": "Enable the option to extract reads assigned to taxonomic IDs based on results from Kraken2, Centrifuge, and Diamond classifiers."
+                },
+
+                "extract_kraken2_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads classified by kraken2 according to taxonomic ID."
+                },
+                "extract_centrifuge_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads classified by centrifuge according to taxonomic ID."
+                },
+                "extract_diamond_reads": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract reads classified by diamond according to taxonomic ID."
+                },
+                "fastq_output": {
+                    "type": "boolean",
+                    "description": "Turn on saving extracted kraken2 reads in fastq format.",
+                    "default": true
+                },
+                "perform_screen_pathogens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Screen viral pathogens for each sample",
+                    "help_text": "Turns on the option to screen viral pathogens by mapping reads against genomes of a list of viral pathogens. Bowtie2 is used for mapping of short reads and minimap2 for long reads."
                 },
                 "outdir": {
                     "type": "string",

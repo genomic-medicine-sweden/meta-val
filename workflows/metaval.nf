@@ -3,12 +3,27 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
+
+// Extract reads of taxIDs
+include { EXTRACT_VIRAL_TAXID                       } from '../modules/local/extract_viral_taxid'
+include { KRAKENTOOLS_EXTRACTKRAKENREADS            } from '../modules/nf-core/krakentools/extractkrakenreads/main'
+include { EXTRACTCENTRIFUGEREADS                    } from '../modules/local/extractcentrifugereads'
+include { EXTRACTCDIAMONDREADS                      } from '../modules/local/extractdiamondreads'
+include { TAXID_READS                               } from '../subworkflows/local/taxid_reads'
+
+// Maping subworkflow
+include { BOWTIE2_BUILD as BOWTIE2_BUILD_PATHOGEN   } from '../modules/nf-core/bowtie2/build/main'
+include { FASTQ_ALIGN_BOWTIE2                       } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
+include { LONGREAD_SCREENPATHOGEN                   } from '../subworkflows/local/longread_screenpathogen'
+
+// Summary subworkflow
+include { FASTQC                                    } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                                   } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap                          } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc                      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML                    } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText                    } from '../subworkflows/local/utils_nfcore_metaval_pipeline'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,11 +39,80 @@ workflow METAVAL {
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
+
+    // Create input channels
+    ch_input = ch_samplesheet.branch { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+
+        // Define single_end based on the conditions
+        meta.single_end = ( fastq_1 && !fastq_2 )
+
+        // reads channels
+        short_reads: meta.instrument_platform != 'OXFORD_NANOPORE'
+            return [ meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+
+        long_reads: meta.instrument_platform == 'OXFORD_NANOPORE'
+            return [ meta, [ fastq_1 ] ]
+    }
+
+    // channels for extracting kraken2 reads
+    ch_extract_reads = ch_samplesheet.multiMap { meta, fastq_1, fastq_2, kraken2_report, kraken2_result, kraken2_taxpasta, centrifuge_report, centrifuge_result, centrifuge_taxpasta, diamond, diamond_taxpasta ->
+        meta.single_end = ( fastq_1 && !fastq_2 )
+        kraken2_taxpasta: [ meta + [ tool: "kraken2" ], kraken2_taxpasta ]
+        kraken2_report: [ meta + [ tool: "kraken2" ], kraken2_report ]
+        kraken2_result: [ meta, kraken2_result ]
+        reads:[ meta, fastq_2 ? [ fastq_1, fastq_2 ] : [ fastq_1 ] ]
+        centrifuge_taxpasta: [ meta + [ tool: "centrifuge" ], centrifuge_taxpasta ]
+        centrifuge_report: [ meta + [ tool: "centrifuge" ], centrifuge_report ]
+        centrifuge_result: [ meta, centrifuge_result ]
+        diamond_taxpasta: [ meta + [ tool: "diamond" ], diamond_taxpasta ]
+        diamond_tsv: [ meta + [ tool: "diamond" ], diamond ]
+    }
+
+    /*
+        SUBWORKFLOW: TAXID_READS
+    */
+    if ( params.perform_extract_reads ) {
+        TAXID_READS (
+        ch_extract_reads.reads,
+        ch_extract_reads.kraken2_taxpasta,
+        ch_extract_reads.kraken2_result,
+        ch_extract_reads.kraken2_report,
+        ch_extract_reads.centrifuge_taxpasta,
+        ch_extract_reads.centrifuge_result,
+        ch_extract_reads.centrifuge_report,
+        ch_extract_reads.diamond_taxpasta,
+        ch_extract_reads.diamond_tsv,
+        )
+        ch_versions            = ch_versions.mix( TAXID_READS.out.versions )
+    }
+
+    /*
+        SUBWORKFLOW: Screen pathogens
+    */
+    ch_reference = Channel.fromPath( params.pathogens_genome, checkIfExists: true)
+        .map{ file -> [ [ id: file.baseName ], file ] }
+    // Short reads
+    if ( params.perform_screen_pathogens ) {
+        BOWTIE2_BUILD_PATHOGEN ( ch_reference )
+        ch_versions      = ch_versions.mix( BOWTIE2_BUILD_PATHOGEN.out.versions )
+        FASTQ_ALIGN_BOWTIE2 (
+            ch_input.short_reads,                              // ch_reads
+            BOWTIE2_BUILD_PATHOGEN.out.index,                  // ch_index
+            false,                                             // save unaligned
+            false,                                             // sort bam
+            ch_reference                                       // ch_fasta
+        )
+        ch_versions = ch_versions.mix( FASTQ_ALIGN_BOWTIE2.out.versions )
+    // Long reads
+        LONGREAD_SCREENPATHOGEN ( ch_input.long_reads, ch_reference )
+        ch_versions = ch_versions.mix( LONGREAD_SCREENPATHOGEN.out.versions )
+    }
+
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        ch_samplesheet
+        ch_extract_reads.reads
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
@@ -85,9 +169,9 @@ workflow METAVAL {
         []
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
-
 }
 
 /*
