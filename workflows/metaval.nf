@@ -89,7 +89,7 @@ workflow METAVAL {
     /*
         SUBWORKFLOW: Screen pathogens
     */
-    ch_reference = Channel.fromPath( params.pathogens_genome, checkIfExists: true)
+    ch_reference = Channel.fromPath( params.pathogens_genomes, checkIfExists: true)
         .map{ file -> [ [ id: file.baseName ], file ] }
     // Short reads
     if ( params.perform_screen_pathogens ) {
