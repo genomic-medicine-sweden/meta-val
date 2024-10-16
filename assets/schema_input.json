@@ -8,29 +8,25 @@
         "type": "object",
         "properties": {
             "sample": {
-                "type": "string",
-                "exists": true,
+                "type": ["string", "integer"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
             "run_accession": {
                 "type": "string",
-                "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Run accession must be provided and cannot contain spaces",
                 "meta": ["run_accession"]
             },
             "instrument_platform": {
                 "type": "string",
-                "exists": true,
                 "enum": ["ILLUMINA", "OXFORD_NANOPORE"],
-                "errorMessage": "Sequencing platform must be provided.",
+                "errorMessage": "Sequencing platform must be provided, must be a string value and must be one of 'ILLUMINA' or 'OXFORD_NANOPORE`.",
                 "meta": ["instrument_platform"]
             },
             "fastq_1": {
                 "type": "string",
-                "exists": true,
                 "format": "file-path",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for short reads 1, long reads or merged pair-end reads must be provided from bowtie2 or minimap2 unmapped reads against the human genome, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'."
