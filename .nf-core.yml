@@ -1,9 +1,11 @@
+bump_version: null
 lint:
   files_exist:
     - assets/nf-core-meta-val_logo_light.png
     - docs/images/nf-core-meta-val_logo_light.png
     - docs/images/nf-core-meta-val_logo_dark.png
     - assets/samplesheet.csv
+    - .github/ISSUE_TEMPLATE/config.yml
   files_unchanged:
     - assets/sendmail_template.txt
     - .github/CONTRIBUTING.md
@@ -18,18 +20,22 @@ lint:
     - docs/usage.md
     - viralPathogenList.csv
     - README.md
-
   multiqc_config:
     - report_comment
-
   nextflow_config:
     - manifest.name
     - manifest.homePage
-
+nf_core_version: 3.0.2
+org_path: null
 repository_type: pipeline
 template:
   author: LilyAnderssonLee
   description: nf-core/taxprofiler post processing
+  force: false
+  is_nfcore: false
   name: metaval
-  prefix: genomic-medicine-sweden
-nf_core_version: "2.14.1"
+  org: genomic-medicine-sweden
+  outdir: .
+  skip_features: null
+  version: 1.0dev
+update: null
