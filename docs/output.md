@@ -90,7 +90,7 @@ The `extracted_reads` directory will only be present if `--perform_extract_reads
 
   - `centrifuge/`
     - `<sample_id>_<taxID>.contigs.fa.gz`: FASTA file containing the resulting contigs.
-    - `<sample_id>_<taxID>.scaffolds.fa.gz`: FASTA file containing resulting scaffolds.
+    - `<sample_id>_<taxID>.scaffolds.fa.gz`: FASTA file containing the resulting scaffolds.
   - `diamond/`
     - `<sample_id>_<taxID>.contigs.fa.gz`
     - `<sample_id>_<taxID>.scaffolds.fa.gz`
