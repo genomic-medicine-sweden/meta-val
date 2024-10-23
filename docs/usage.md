@@ -125,7 +125,7 @@ Filtering the output files from metagenomics classifiers like `Kraken2`, `Centri
 
 ### Extract Viral TaxIDs
 
-This step involves extracting all taxonomic IDs of viral species predicted by classifiers by enabling `--perform_extract_reads`, while not specifying a taxonomic ID list with `--taxid`.
+This step involves extracting all taxonomic IDs of viral species predicted by classifiers by enabling `--perform_extract_reads`and the `--taxid` should be empty.
 
 ### Extract Reads
 
