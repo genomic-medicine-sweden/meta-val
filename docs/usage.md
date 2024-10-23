@@ -36,7 +36,7 @@ genomic-medicine-sweden/meta-val will require the information given bellow.
 | sample              | Unique sample name [required].                                                                                                            |
 | run_accession       | Run ID or name unique for each (pairs of) file(s). Can also supply sample name again here, if only a single run was generated [required]. |
 | instrument_platform | Sequencing platform reads generated on, selected from the EBI ENA controlled vocabulary [required].                                       |
-| fastq_1             | Unmapped human reads from bowtie2/minimap2, filtered reads from bbduk/(nanoq/FiltLong) or raw reads. Gzipped compressed files accepted.   |
+| fastq_1             | Unmapped human reads from bowtie2/minimap2, filtered reads from bbduk/nanoq/FiltLong or raw sequencing reads. Gzipped compressed files accepted.   |
 | fastq_2             | Unmapped human reads from bowtie2, filtered reads from bbduk/(nanoq/FiltLong) or raw reads. Gzipped compressed files accepted.            |
 | kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                |
 | kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                               |
