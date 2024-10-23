@@ -120,7 +120,7 @@ Map Illumina short reads to genomes using `bowtie2` and map Nanopore long reads 
 - `pathogens/`
   - `bowtie2/`
     - `align/`
-      - `<sample_id>_aligned_pathogens_genome_sorted.bam`: BAM file containing short reads that aligned against the user-supplied pathogens genome
+      - `<sample_id>_aligned_pathogens_genome_sorted.bam`: BAM file containing short reads that aligned against the user-supplied pathogens genomes
       - `<sample_id>_aligned_pathogens_genome_sorted.bam.bai`: Index of the bam file.
     - `build/`
       - `bowtie2/*.bt2l`: Bowtie2 indicies of reference pathogens genome
