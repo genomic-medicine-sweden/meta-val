@@ -13,7 +13,7 @@ The directories listed below will be created in the results directory after the 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
 - [FastQC](#fastqc) - Raw read QC
-- [Extract Viral TaxIDs](#Extract-Viral-TaxIDs) - Extract all taxonomic IDs of viral speicies identified by classifiers
+- [Extract Viral TaxIDs](#Extract-Viral-TaxIDs) - Extract all taxonomic IDs of viral species identified by classifiers
 - [Extract Reads](#Extract-Reads) - Extract reads of a TaxID
 - [De novo assembly](#De-novo-assembly) for extracted reads of TaxID
 - [Bowtie2](#Mapping) - Map raw Illumina reads to a pathogen genome database or map Illumina reads of specific taxIDs to genomes with positive BLAST hits.
