@@ -57,7 +57,7 @@ sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sa
 
 #### Pathogen genome database
 
-A concatenated FASTA file containing all the pathogen genomes you are interested in.
+A concatenated FASTA file containing all the pathogen genomes a user is interested in.
 
 #### accession2taxid
 
