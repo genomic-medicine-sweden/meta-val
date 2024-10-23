@@ -121,7 +121,7 @@ You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-c
 
 ### Decontamination
 
-Filter the output files from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND` to remove false positives and background contamination can be activated by enabling `--decontamination` option. This step compares results to the negative control to identify likely present species based on user-defined thresholds.
+Filtering the output files from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND` to remove false positives and background contamination can be activated by enabling `--decontamination` option. This step compares results to the negative control to identify likely present species based on user-defined thresholds.
 
 ### Extract Viral TaxIDs
 
