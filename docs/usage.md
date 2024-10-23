@@ -139,7 +139,7 @@ De-novo assembly can be performed for extracted reads of TaxIDs by enabling `--p
 
 ### Mapping
 
-To screen for the existence of pathogens in raw reads, map the raw reads to a pathogens genome database (`--pathogens_genomes`) by activating the `--perform_screen_pathogens` option. Alternatively, map the extract reads of taxIDs to the genomes that correspond to the positive hits from BLASTx/BLASTn.
+To screen for the existence of pathogens in samples, map the raw reads to a pathogens genome database (`--pathogens_genomes`) by activating the `--perform_screen_pathogens` option. Alternatively, map the extract reads of taxIDs to the genomes that correspond to the positive hits from BLASTx/BLASTn.
 
 Use `Bowtie2` for short reads and `minimap2` for long reads.
 
