@@ -4,21 +4,21 @@ process FLYE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/flye:2.9--py39h6935b12_1' :
-        'biocontainers/flye:2.9--py39h6935b12_1' }"
+        'oras://community.wave.seqera.io/library/flye:2.9.5--eb07d7b7094f222c' :
+        'community.wave.seqera.io/library/flye:2.9.5--0221998e9c3ec606' }"
 
     input:
     tuple val(meta), path(reads)
     val mode
 
     output:
-    tuple val(meta), path("*.fasta.gz"), optional:true, emit: fasta
-    tuple val(meta), path("*.gfa.gz")  , optional:true, emit: gfa
-    tuple val(meta), path("*.gv.gz")   , optional:true, emit: gv
-    tuple val(meta), path("*.txt")     , optional:true, emit: txt
-    tuple val(meta), path("*.log")     , optional:true, emit: log
-    tuple val(meta), path("*.json")    , optional:true, emit: json
-    path "versions.yml"                , optional:true, emit: versions
+    tuple val(meta), path("*.fasta.gz"), emit: fasta
+    tuple val(meta), path("*.gfa.gz")  , emit: gfa
+    tuple val(meta), path("*.gv.gz")   , emit: gv
+    tuple val(meta), path("*.txt")     , emit: txt
+    tuple val(meta), path("*.log")     , emit: log
+    tuple val(meta), path("*.json")    , emit: json
+    path "versions.yml"                , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
