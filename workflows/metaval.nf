@@ -22,6 +22,10 @@ include { BOWTIE2_BUILD as BOWTIE2_BUILD_PATHOGEN   } from '../modules/nf-core/b
 include { FASTQ_ALIGN_BOWTIE2                       } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
 include { LONGREAD_SCREENPATHOGEN                   } from '../subworkflows/local/longread_screenpathogen'
 
+// Calling consensus
+include { TAXID_BAM as TAXID_BAM_SHORTREAD          } from '../subworkflows/local/taxid_bam'
+include { TAXID_BAM as TAXID_BAM_LONGREAD           } from '../subworkflows/local/taxid_bam'
+
 // Summary subworkflow
 include { FASTQC                                    } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                   } from '../modules/nf-core/multiqc/main'
@@ -171,6 +175,13 @@ workflow METAVAL {
         // Map long reads to the pathogens genome
         LONGREAD_SCREENPATHOGEN ( ch_input.long_reads, ch_reference )
         ch_versions = ch_versions.mix( LONGREAD_SCREENPATHOGEN.out.versions )
+
+        // Subset bam file for each taxID
+        accession2taxid_map = Channel.fromPath ( params.accession2taxid, checkIfExists: true )
+        TAXID_BAM_SHORTREAD ( FASTQ_ALIGN_BOWTIE2.out.bam,FASTQ_ALIGN_BOWTIE2.out.bai,accession2taxid_map )
+        TAXID_BAM_LONGREAD( LONGREAD_SCREENPATHOGEN.out.bam,LONGREAD_SCREENPATHOGEN.out.bai,accession2taxid_map )
+
+        // Calling consensus
     }
 
     //
