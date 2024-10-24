@@ -27,55 +27,73 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
      <img title="metaval workflow" src="docs/images/metaval_pipeline_metromap.png">
 </p>
 
-### Green Pipeline - Check the Existence of Predefined Viral Pathogens
+### Green Workflow - Pathogen Screening
 
-1. Map Reads to Viral Pathogen Genomes
+This workflow is activated by enabling the `--perform_screen_pathogens` option.
 
-   - Map reads to a predefined list of viral pathogen genomes using `Bowtie2` for Illumina reads or `minimap2` for Nanopore reads. This step helps in checking the presence of known viral pathogens in the sample.
+1. **Map reads to pathogen genomes**
 
-2. Use BLAST to Identify Target Reads
+   - Map reads to a predefined list of viral pathogen genomes using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/) for Illumina reads or [minimap2](https://github.com/lh3/minimap2) for Nanopore reads. This step checks for the presence of known pathogens in the sample.
 
-   - Use `BLAST` to identify the closest reference genomes for the extracted reads.
+2. **Call consensus**
 
-3. Extract Target Reads
+   - This step generates consensus sequences for a large number of reads mapped to pathogen genomes using [samtools](<(http://www.htslib.org/)>) for Illumina reads or [medaka](https://github.com/nanoporetech/medaka) for Nanopore reads. The resulting consensus sequence will then be used as input for BLAST.
+
+3. **BLAST for pathogen identification**
+
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on the protein database, and [BLASTn](https://blast.ncbi.nlm.nih.gov/Blast.cgi) based on the nucleotide database.
+
+4. **Extract target reads**
 
    - From the mapped reads, extract the target reads that match the predefined viral pathogens based on the result of `BLAST`.
 
-4. Visualize Using IGV
+5. **Visualisation using IGV**
 
    - Visualize the extracted reads using `IGV` (Integrative Genomics Viewer) to provide a graphical representation for detailed analysis.
 
-5. Perform Quality Check
-   - Conduct quality checks on the target reads using `FASTQC` and `MultiQC` to ensure data quality and reliability.
+6. **Perform quality check**
+   - Conduct quality checks on the target reads using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](<(http://multiqc.info/)>) to ensure data quality and reliability.
 
-### Orange Pipeline - Verify Identified Viruses
+### Orange Workflow - Verify Identified Viruses
 
-1. Extract Viral TaxIDs
+This workflow is activated by enabling the `--perform_extract_reads` option and disabling the `--taxid`.
 
-   - Extract viral TaxIDs predicted by taxonomic classification tools such as `Kraken2`, `Centrifuge`, and `DIAMOND`.
+1. **Decontamination**
 
-2. Extract Classified Reads
+   - Filter the output files from metagenomics classifiers like [Kraken2](https://ccb.jhu.edu/software/kraken2/), [Centrifuge](https://ccb.jhu.edu/software/centrifuge/), or [DIAMOND](https://github.com/bbuchfink/diamond) to remove false positives and background contaminations. This step compares results to the negative control and identifies likely present species based on user-defined thresholds.
 
-   - Extract the reads classified as viruses based on the identified TaxIDs.
+2. **Extract viral TaxIDs**
 
-3. BLAST
+   - Extract **_viral_** TaxIDs predicted by taxonomic classification tools such as `Kraken2`, `Centrifuge`, and `DIAMOND`.
 
-   - Identify the closest reference genomes for the extracted reads using `BLAST`.
+3. **Extract reads**
 
-4. Mapping
+   - Extract the reads classified as viruses based on a list of identified TaxIDs.
 
-   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`.
+4. **de-novo assembly**
 
-5. Visualize Using IGV
+   - This step performs de novo assembly for TaxIDs with a number of reads exceeding `params.min_read_counts`. [Spades](https://github.com/ablab/spades) is used for Illumina reads, and [Flye](https://github.com/mikolmogorov/Flye) is used for Nanopore reads. The resulting contig files will be used as input for `BLAST`.
+
+5. **BLAST**
+
+   - Use `BLAST` to identify the closest reference genomes for the target reads. There are two options: `BLASTx` using [DIAMOND](https://github.com/bbuchfink/diamond) based on the protein database, and [BLASTn](https://github.com/bbuchfink/diamond) based on the nucleotide database.
+
+6. **Mapping**
+
+   - Map the reads of TaxIDs to the closest reference genomes identified by `BLAST`. Use [Bowtie2](<(http://bowtie-bio.sourceforge.net/bowtie2/)>) for Illumina reads and [minimap2](https://github.com/lh3/minimap2) for Nanopore reads.
+
+7. **Visualisation using IGV**
 
    - Visualize the mapped reads using `IGV`.
 
-6. Perform Quality Check
-   - Conduct quality checks on the classified reads using `FASTQC` and `MultiQC` to ensure the accuracy of the data.
+8. **Perform quality check**
+   - Conduct quality checks on the classified reads using [FastQC](<(https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)>) and [MultiQC](<(http://multiqc.info/)>) to ensure the accuracy of the data.
 
-## Blue Pipeline - Verify User-Defined TaxIDs
+## Blue Workflow - Verify User-Defined TaxIDs
 
-All steps are the same as the **Orange Pipeline** except using user-defined TaxIDs instead of extracting viral TaxIDs.
+This workflow is activated by enabling the `--perform_extract_reads` option and the `--taxid` option, allowing users to define a list of TaxIDs. It is not limited to `viral` TaxIDs and can include `bacteria`, `fungi`, `archaea`, `parasites`, or `plasmids`.
+
+All steps are the same as the **Orange Workflow** except using user-defined TaxIDs instead of extracting predefined viral TaxIDs.
 
 ## Usage
 
@@ -101,7 +119,7 @@ nextflow run genomic-medicine-sweden/meta-val \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
-   --run_kraken2 --run_centrifuge --run_diamond
+   --perform_extract_reads --extract_kraken2_reads
 ```
 
 > [!WARNING]
@@ -173,7 +191,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-genomic-medicine-sweden/meta-val was originally written by [LilyAnderssonLee](https://github.com/LilyAnderssonLee). Additional contributors were [sofstam](https://github.com/sofstam), [lokeshbio](https://github.com/lokeshbio)
+genomic-medicine-sweden/meta-val was originally written by [LilyAnderssonLee](https://github.com/LilyAnderssonLee).All PRs were reviewed by [sofstam](https://github.com/sofstam), with additional contributions from [lokeshbio](https://github.com/lokeshbio)
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 

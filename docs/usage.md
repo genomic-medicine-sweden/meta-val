@@ -17,7 +17,9 @@ The pipeline, constructed using the `nf-core` [template](https://nf-co.re/tools#
 1. Install Nextflow (>=23.04.0) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
 2. Install one of the following technologies for full pipeline reproducibility: Docker, Singularity, Podman, Shifter or Charliecloud.
 
-## Samplesheet input
+## Input
+
+### Samplesheet
 
 You will need to create a samplesheet in csv format with information about the samples you would like to analyse before running the pipeline. It has to be a comma-separated file and a header row as shown in the examples below.
 
@@ -29,21 +31,21 @@ This samplesheet is then specified on the command line as follows:
 
 genomic-medicine-sweden/meta-val will require the information given bellow.
 
-| Column              | Description                                                                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| sample              | Unique sample name [required].                                                                                                            |
-| run_accession       | Run ID or name unique for each (pairs of) file(s). Can also supply sample name again here, if only a single run was generated [required]. |
-| instrument_platform | Sequencing platform reads generated on, selected from the EBI ENA controlled vocabulary [required].                                       |
-| fastq_1             | Unmapped human reads from bowtie2/minimap2. Gzipped compressed files accepted.                                                            |
-| fastq_2             | Unmapped human reads from bowtie2. Gzipped compressed files accepted.                                                                     |
-| kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                |
-| kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                               |
-| kraken2_taxpasta    | Standardized kraken2 taxonomic profiles for all samples.                                                                                  |
-| centrifuge_report   | File containing kraken-style report from centrifuge output files.                                                                         |
-| centrifuge_result   | File containing classification results.                                                                                                   |
-| centrifuge_taxpasta | Standardized centrifuge taxonomic profiles for all samples.                                                                               |
-| diamond             | Tab-separated file containing taxonomic classification of hits.                                                                           |
-| diamond_taxpasta    | Standardized diamond taxonomic profiles for all samples.                                                                                  |
+| Column              | Description                                                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| sample              | Unique sample name [required].                                                                                                                   |
+| run_accession       | Run ID or name unique for each (pairs of) file(s). Can also supply sample name again here, if only a single run was generated [required].        |
+| instrument_platform | Sequencing platform reads generated on, selected from the EBI ENA controlled vocabulary [required].                                              |
+| fastq_1             | Unmapped human reads from bowtie2/minimap2, filtered reads from bbduk/nanoq/FiltLong or raw sequencing reads. Gzipped compressed files accepted. |
+| fastq_2             | Unmapped human reads from bowtie2, filtered reads from bbduk/nanoq/FiltLong or raw reads. Gzipped compressed files accepted.                     |
+| kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                       |
+| kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                                      |
+| kraken2_taxpasta    | Standardized kraken2 taxonomic profiles for all samples.                                                                                         |
+| centrifuge_report   | File containing kraken-style report from centrifuge output files.                                                                                |
+| centrifuge_result   | File containing classification results.                                                                                                          |
+| centrifuge_taxpasta | Standardized centrifuge taxonomic profiles for all samples.                                                                                      |
+| diamond             | Tab-separated file containing taxonomic classification of hits.                                                                                  |
+| diamond_taxpasta    | Standardized diamond taxonomic profiles for all samples.                                                                                         |
 
 ```csv title="samplesheet.csv"
 sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_result,kraken2_taxpasta,centrifuge_report,centrifuge_result,centrifuge_taxpasta,diamond,diamond_taxpasta
@@ -51,12 +53,34 @@ sample1,run1,ILLUMINA,sample1.unmapped_1.fastq.gz,sample1.unmapped_2.fastq.gz,sa
 sample2,run1,ILLUMINA,sample2.unmapped_1.fastq.gz,sample2.unmapped_2.fastq.gz,sample2.kraken2.kraken2.report.txt,sample2.kraken2.kraken2.classifiedreads.txt,kraken2_kraken2-db.tsv,sample2.centrifuge.txt,sample2.centrifuge.results.txt,centrifuge_centrifuge-db.tsv,sample2.diamond.tsv,diamond_diamond-db.tsv
 ```
 
+### Optional input
+
+#### Pathogen genome database
+
+A concatenated FASTA file containing all the pathogen genomes a user is interested in.
+
+#### accession2taxid
+
+Users need to prepare a file containing accession IDs of pathogens and their corresponding taxonomic IDs
+
+#### Blastn and/or Blastn database
+
+Use a custom database or download available [NCBI databases](https://ftp.ncbi.nlm.nih.gov/blast/db/). See the [documentation](https://ftp.ncbi.nlm.nih.gov/blast/documents/blastdb.html). To speed up the BLAST process, be cautious with which the choice of database. For example, for viruses, one could use `ref_viruses_rep_genomes` or `refseq_protein` instead of the `nt` or `nr` database.
+
 ## Running the pipeline
 
-The typical command for running the pipeline is as follows:
+The example commands for running each workflow are as follows:
 
 ```bash
-nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker
+# Green Workflow - pathogen screening
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_screen_pathogens --pathogens_genomes /path/to/reference.fna --accession2taxid /path/to/accession2taxid.map
+
+# Orange Workflow - Verify Identified Viruses
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --perform_extract_reads --extract_kraken2_reads --extract_centrifuge_reads --extract_diamond_reads
+
+# Blue Workflow - Verify User-Defined TaxIDs
+nextflow run genomic-medicine-sweden/meta-val --input ./samplesheet.csv --outdir ./results -profile docker --taxid 211044 2886042 --perform_extract_reads --extract_kraken2_reads --extract_centrifuge_reads --extract_diamond_reads
+
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -94,6 +118,30 @@ genome: 'GRCh37'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+### Decontamination
+
+Filtering the output files from metagenomics classifiers like `Kraken2`, `Centrifuge`, or `DIAMOND` to remove false positives and background contamination can be activated by enabling `--decontamination` option. This step compares results to the negative control to identify likely present species based on user-defined thresholds.
+
+### Extract Viral TaxIDs
+
+This step involves extracting all taxonomic IDs of viral species predicted by classifiers by enabling `--perform_extract_reads`and the `--taxid` should be empty.
+
+### Extract Reads
+
+This step either retrieves the reads of all viral TaxIDs predicted by classifiers or extracts reads from a user-defined list of TaxIDs separated by spaces when the `--taxid` option is activated. Extracting reads predicted by `Kraken2` can be activated with `--extract_kraken2_reads`, extracting reads predicted by `Centrifuge` can be activated with `--extract_centrifuge_reads` and extracting reads predicted by `DIAMOND` can be activated with `--extract_diamond_reads`.
+
+If the `--taxid` option is included in the command line, the pipeline will only extract reads for the user specified TaxIDs, in other words, `--taxid` takes priority.
+
+### de-novo assembly
+
+De-novo assembly can be performed for extracted reads of TaxIDs by enabling `--perform_shortread_denovo` for short reads or the `--perform_longread_denovo` option for long reads, provided the number of reads exceeds `params.min_read_counts`. The recommended minimum number of reads is 100. If there are too few reads, the process will fail.
+
+### Mapping
+
+To screen for the existence of pathogens in samples, map the raw reads to a pathogens genome database (`--pathogens_genomes`) by activating the `--perform_screen_pathogens` option. Alternatively, map the extract reads of taxIDs to the genomes that correspond to the positive hits from BLASTx/BLASTn.
+
+Use `Bowtie2` for short reads and `minimap2` for long reads.
 
 ### Updating the pipeline
 

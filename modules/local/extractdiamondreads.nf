@@ -3,10 +3,10 @@ process EXTRACTCDIAMONDREADS {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "bioconda::seqkit=2.8.0"
+    conda "bioconda::seqkit=2.8.2"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/seqkit:2.8.0--h9ee0642_0':
-        'biocontainers/seqkit:2.8.0--h9ee0642_0' }"
+        'https://depot.galaxyproject.org/singularity/seqkit:2.8.2--h9ee0642_1':
+        'biocontainers/seqkit:2.8.2--h9ee0642_1' }"
 
     input:
     val taxid
@@ -14,8 +14,8 @@ process EXTRACTCDIAMONDREADS {
     tuple val (meta), path(fastq) // bowtie2/align *unmapped_{1,2}.fastq.gz
 
     output:
-    tuple val(meta), path("*.fastq"), emit: extracted_diamond_reads
-    path "versions.yml", emit: versions
+    tuple val(meta), path("*.fastq"), optional:true, emit: extracted_diamond_reads
+    path "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
