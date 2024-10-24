@@ -31,21 +31,21 @@ This samplesheet is then specified on the command line as follows:
 
 genomic-medicine-sweden/meta-val will require the information given bellow.
 
-| Column              | Description                                                                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| sample              | Unique sample name [required].                                                                                                            |
-| run_accession       | Run ID or name unique for each (pairs of) file(s). Can also supply sample name again here, if only a single run was generated [required]. |
-| instrument_platform | Sequencing platform reads generated on, selected from the EBI ENA controlled vocabulary [required].                                       |
-| fastq_1             | Unmapped human reads from bowtie2/minimap2, filtered reads from bbduk/nanoq/FiltLong or raw sequencing reads. Gzipped compressed files accepted.   |
-| fastq_2             | Unmapped human reads from bowtie2, filtered reads from bbduk/nanoq/FiltLong or raw reads. Gzipped compressed files accepted.            |
-| kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                |
-| kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                               |
-| kraken2_taxpasta    | Standardized kraken2 taxonomic profiles for all samples.                                                                                  |
-| centrifuge_report   | File containing kraken-style report from centrifuge output files.                                                                         |
-| centrifuge_result   | File containing classification results.                                                                                                   |
-| centrifuge_taxpasta | Standardized centrifuge taxonomic profiles for all samples.                                                                               |
-| diamond             | Tab-separated file containing taxonomic classification of hits.                                                                           |
-| diamond_taxpasta    | Standardized diamond taxonomic profiles for all samples.                                                                                  |
+| Column              | Description                                                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| sample              | Unique sample name [required].                                                                                                                   |
+| run_accession       | Run ID or name unique for each (pairs of) file(s). Can also supply sample name again here, if only a single run was generated [required].        |
+| instrument_platform | Sequencing platform reads generated on, selected from the EBI ENA controlled vocabulary [required].                                              |
+| fastq_1             | Unmapped human reads from bowtie2/minimap2, filtered reads from bbduk/nanoq/FiltLong or raw sequencing reads. Gzipped compressed files accepted. |
+| fastq_2             | Unmapped human reads from bowtie2, filtered reads from bbduk/nanoq/FiltLong or raw reads. Gzipped compressed files accepted.                     |
+| kraken2_report      | Kraken2 report containing stats about classified and not classified reads.                                                                       |
+| kraken2_result      | Kraken2 output file indicating the taxonomic assignment of each input read.                                                                      |
+| kraken2_taxpasta    | Standardized kraken2 taxonomic profiles for all samples.                                                                                         |
+| centrifuge_report   | File containing kraken-style report from centrifuge output files.                                                                                |
+| centrifuge_result   | File containing classification results.                                                                                                          |
+| centrifuge_taxpasta | Standardized centrifuge taxonomic profiles for all samples.                                                                                      |
+| diamond             | Tab-separated file containing taxonomic classification of hits.                                                                                  |
+| diamond_taxpasta    | Standardized diamond taxonomic profiles for all samples.                                                                                         |
 
 ```csv title="samplesheet.csv"
 sample,run_accession,instrument_platform,fastq_1,fastq_2,kraken2_report,kraken2_result,kraken2_taxpasta,centrifuge_report,centrifuge_result,centrifuge_taxpasta,diamond,diamond_taxpasta
