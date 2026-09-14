@@ -361,6 +361,19 @@ workflow METAVAL {
                 .join(FETCH_BLAST_GENOMES.out.longreads_genome, by:0)
             MAPPING_LONGREAD ( ch_mapping_input_longread, true )
 
+            // Consensus
+
+            ch_bam_mapping = channel.empty()
+            ch_bam_mapping_shortread = MAPPING_SHORTREAD.out.bam
+                .join(MAPPING_SHORTREAD.out.bai, by:0)
+            ch_bam_mapping_longread = MAPPING_LONGREAD.out.bam
+                .join(MAPPING_LONGREAD.out.bai, by:0)
+            ch_bam_mapping = ch_bam_mapping.mix(ch_bam_mapping_shortread, ch_bam_mapping_longread)
+
+            CONSENSUS ( ch_bam_mapping, [ [], [] ], params.consensus_min_bases )
+
+
+
             // Coverage tables
             ch_coverage_tables = ch_coverage_tables
                 .mix( MAPPING_SHORTREAD.out.coverage, MAPPING_LONGREAD.out.coverage )

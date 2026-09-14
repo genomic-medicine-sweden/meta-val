@@ -1,17 +1,18 @@
 name: medaka
-description: Create polished consensus sequences from nanopore reads and an assembly using Medaka
+description: A tool to create consensus sequences and variant calls from
+  nanopore sequencing data
 keywords:
   - assembly
   - polishing
   - nanopore
-  - consensus
 tools:
   - medaka:
-      description: Neural network sequence error correction
-      homepage: https://nanoporetech.github.io/medaka/index.html
-      documentation: https://nanoporetech.github.io/medaka/index.html
+      description: Neural network sequence error correction.
+      homepage: https://github.com/nanoporetech/medaka
+      documentation: https://github.com/nanoporetech/medaka
       tool_dev_url: https://github.com/nanoporetech/medaka
-      licence: ["Mozilla Public License 2.0"]
+      licence:
+        - "Mozilla Public License 2.0"
       identifier: biotools:medaka
 input:
   - - meta:
@@ -21,12 +22,15 @@ input:
           e.g. [ id:'test', single_end:false ]
     - reads:
         type: file
-        description: Input nanopore FASTA or FASTQ files
+        description: List of input nanopore fasta/FastQ files
         pattern: "*.{fasta,fa,fastq,fastq.gz,fq,fq.gz}"
+        ontologies:
+          - edam: http://edamontology.org/format_1930
     - assembly:
         type: file
-        description: Input genome assembly
+        description: Genome assembly
         pattern: "*.{fasta,fa}"
+        ontologies: []
 output:
   assembly:
     - - meta:
@@ -34,10 +38,12 @@ output:
           description: |
             Groovy Map containing sample information
             e.g. [ id:'test', single_end:false ]
-      - "*_sorted.fasta":
+      - "*.fa.gz":
           type: file
           description: Polished genome assembly
-          pattern: "*_sorted.fasta"
+          pattern: "*.fa.gz"
+          ontologies:
+            - edam: http://edamontology.org/format_3989
   versions_medaka:
     - - ${task.process}:
           type: string
@@ -45,17 +51,7 @@ output:
       - medaka:
           type: string
           description: The name of the tool
-      - "medaka --version 2>&1 | sed 's/medaka //g'":
-          type: eval
-          description: The expression to obtain the version of the tool
-  versions_seqkit:
-    - - ${task.process}:
-          type: string
-          description: The name of the process
-      - seqkit:
-          type: string
-          description: The name of the tool
-      - "seqkit | sed '3!d; s/Version: //'":
+      - medaka --version 2>&1 | sed "s/medaka //g":
           type: eval
           description: The expression to obtain the version of the tool
 topics:
@@ -66,18 +62,10 @@ topics:
       - medaka:
           type: string
           description: The name of the tool
-      - "medaka --version 2>&1 | sed 's/medaka //g'":
-          type: eval
-          description: The expression to obtain the version of the tool
-    - - ${task.process}:
-          type: string
-          description: The name of the process
-      - seqkit:
-          type: string
-          description: The name of the tool
-      - "seqkit | sed '3!d; s/Version: //'":
+      - medaka --version 2>&1 | sed "s/medaka //g":
           type: eval
           description: The expression to obtain the version of the tool
 authors:
-  - "@nschan"
-  - "@LilyAnderssonLee"
+  - "@avantonder"
+maintainers:
+  - "@avantonder"

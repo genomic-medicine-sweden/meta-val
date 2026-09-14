@@ -4,7 +4,7 @@
 
 include { SAMTOOLS_CONSENSUS as SAMTOOLS_CONSENSUS_SHORTREAD    } from '../../../modules/nf-core/samtools/consensus'
 include { SAMTOOLS_CONSENSUS as SAMTOOLS_CONSENSUS_LONGREAD     } from '../../../modules/nf-core/samtools/consensus'
-include { MEDAKA_PARALLEL as MEDAKA                             } from '../../../modules/local/medaka_consensus'
+include { MEDAKA as MEDAKA                                      } from '../../../modules/nf-core/medaka'
 include { FILTER_CONSENSUS as FILTER_CONSENSUS_SHORTREAD        } from '../../../modules/local/filter_consensus'
 include { FILTER_CONSENSUS as FILTER_CONSENSUS_LONGREAD         } from '../../../modules/local/filter_consensus'
 
